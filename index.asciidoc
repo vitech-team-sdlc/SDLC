@@ -1,0 +1,136 @@
+:icons: font
+:toc:
+:doctype: book
+:sectanchors:
+:idseparator: -
+:data-uri:
+:allow-uri-read:
+:safe: unsafe
+
+= SDLC
+
+toc::[]
+
+[[motivation]]
+== Motivation
+
+
+TBD :tada:
+
+
+[[overview]]
+== Overview
+
+=== Architecture
+See: https://whimsical.com/lines-2-8GKYgDts1C3ZKb3ccsrzpR
+
+image:images/architecture.png[]
+
+=== CI/CD flow
+
+image:https://lucid.app/publicSegments/view/6a2266b4-6082-4c3f-b5e7-b3955359de78/image.png[]
+
+=== Pull Request pipeline
+image:https://lucid.app/publicSegments/view/31739cad-3775-43a6-acb4-9400384732ca/image.png[width=600]
+
+=== Release
+image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9/image.png[width=600]
+
+=== Stack
+* https://jenkins-x.io[Jenkins X] - CORE
+* https://tekton.dev[Tekton] - CI/CD
+* https://kubernetes.io[Kubernetes]
+* https://www.terraform.io[Terraform]
+* https://www.keycloak.org[Keycloak] - OpenId provider
+* https://webdriver.io[WebdriverIO] - Large test framework
+
+== Setup Cluster & Environment Repository
+
+[[setup]]
+=== Prerequisites
+* https://github.com/join[Create a git bot user] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
+* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI]
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
+* https://googlecontainertools.github.io/kpt/[Kpt]
+
+=== Setup
+* Open https://jenkins-x.io/docs/v3/getting-started/gke/[Jenkins X GKE] and select your cloud provider.
+
+NOTE: Currently, only GKE + Vault been tested.
+
+* Follow instruction on page.
+** Instead of *Jx Cluster git repository*  we are going to use our own template: https://github.com/vitech-team/mood-feed-environment
+* generate GKE service account https://cloud.google.com/container-registry/docs/advanced-authentication#json-key[json key]
+* generate Snyk: https://snyk.io/blog/service-accounts/[token]
+* generate Sonar cloud: https://docs.sonarqube.org/latest/user-guide/user-token/[token]
+* generate Slack: https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
+* If you need identity provider or Oauth server create Keycloak realm json.
+
+=== Populate secrets
+==== Auto populate secrets
+`jx secret populate`
+
+==== Configure Snyk
+* `jx secret edit --filter snyk` - after executing you will be promt to enter token
+
+==== Configure Sonar
+* `jx secret edit --filter sonar` - after executing you will be promt to sonar data *token/login* and *host-url*
+
+NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
+
+==== Configure docker registry
+Use generated key from <<Setup>> section: `key.json`
+
+[source,bash]
+.docker-registry-auth.sh
+----
+SECRETNAME=docker-registry-auth
+kubectl create secret docker-registry $SECRETNAME \
+  --docker-server=https://gcr.io \
+  --docker-username=_json_key \
+  --docker-email=sdlc@vitechteam.com \
+  --docker-password="$(cat key.json)"
+
+kubectl label  secret $SECRETNAME secret.jenkins-x.io/replica-source=true
+----
+
+==== Verify
+* Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
+
+
+==== Configure Slack Notifications
+===== Alertmanager
+* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+
+===== Large Test Notification
+If you wanna change Large test execution message to slack
+
+* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. ``
+** You can use  next variables what can be populated automatically `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`"
+
+== Example Apps
+* Frontend app example
+* Backend example
+* Large test example
+
+== Pipelines
+=== Pipelines catalog and pack
+All shared tasks and packs stored in: https://github.com/vitech-team/tekton-pipelines-catalog
+
+==== Packs
+Custom packs: https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs
+
+==== Tasks
+All tasks are in sync with https://github.com/vitech-team/tekton-pipelines-catalog[environment repository] via https://googlecontainertools.github.io/kpt/[Kpt].
+For more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
+
+NOTE: for more information about pipelines on JX see: https://jenkins-x.io/docs/v3/develop/pipeline-catalog/
+
+== Runbook
+[[runbook-vault]]
+=== Vault
+
+* For port forward Vault type: `jx secret vault portforward` - after that you can rich Vault at https://localhost:8200
+* Vault root token can be found in secret: `vault-unseal-keys`, key: `vault-root`
+
+
