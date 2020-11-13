@@ -100,13 +100,26 @@ kubectl label  secret $SECRETNAME secret.jenkins-x.io/replica-source=true
 
 ==== Configure Slack Notifications
 ===== Alertmanager
-* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
 
 ===== Large Test Notification
 If you wanna change Large test execution message to slack
 
-* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. ``
+* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. See example `charts/dev/secret/secret-schema.yaml`
 ** You can use  next variables what can be populated automatically `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`"
+
+=== Configure Large Tests
+Currently, we have only Large Tests implementation only based https://webdriver.io[WebdriverIO].
+We added a few steps to `release` and `pullrequest` pipelines:
+# Check if large test been executed on *Staging* before promote it on Production *environment*
+# Execute *Large Tests* after changes been applied on environment like Production.
+
+==== Enable Large Tests
+* open `.lighthouse/large-test/triggers.yaml` and change: `always_run: false`, `optional: false` to `true`.
+* open `.lighthouse/jenkins-x/release.yaml` and uncomment commented tasks: ` large-test-prepare-and-check` and `large-test-execute`
+** change large test image name property: `LARGE_REPORTS_IMAGE`
+** change your app URLs properties: `APP_URL_STAGING`, `APP_URL_PRODUCTION`, if you have more environments just add additional property like: `APP_URL_XXX`
+
 
 == Example Apps
 * Frontend app example
