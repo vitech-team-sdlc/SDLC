@@ -6,6 +6,7 @@
 :data-uri:
 :allow-uri-read:
 :safe: unsafe
+:source-highlighter: rouge
 
 = SDLC
 
@@ -52,69 +53,157 @@ image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9
 * https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI]
 * https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
 * https://googlecontainertools.github.io/kpt/[Kpt]
+* https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
+* generate Snyk https://snyk.io/blog/service-accounts/[token]
+* generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
+* generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
 
 === Setup
-* Open https://jenkins-x.io/docs/v3/getting-started/gke/[Jenkins X GKE] and select your cloud provider.
+==== 1. Create Infrastructure Repository
+Open https://jenkins-x.io/docs/v3/getting-started/gke/[Jenkins X GKE] and select your cloud provider.
 
 NOTE: Currently, only GKE + Vault been tested.
 
-* Follow instruction on page.
-** Instead of *Jx Cluster git repository*  we are going to use our own template: https://github.com/vitech-team/mood-feed-environment
-* generate GKE service account https://cloud.google.com/container-registry/docs/advanced-authentication#json-key[json key]
-* generate Snyk: https://snyk.io/blog/service-accounts/[token]
-* generate Sonar cloud: https://docs.sonarqube.org/latest/user-guide/user-token/[token]
-* generate Slack: https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
-* If you need identity provider or Oauth server create Keycloak realm json.
+==== 2. Create Environment Repository
+Open following link and generate repo based on template: https://github.com/vitech-team/jx3-gke-vault
 
-=== Populate secrets
-==== Auto populate secrets
-`jx secret populate`
+==== 3. Prepare install script
 
-==== Configure Snyk
-* `jx secret edit --filter snyk` - after executing you will be promt to enter token
-
-==== Configure Sonar
-* `jx secret edit --filter sonar` - after executing you will be promt to sonar data *token/login* and *host-url*
-
-NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
-
-==== Configure docker registry
-Use generated key from <<Setup>> section: `key.json`
-
-[source,bash]
-.docker-registry-auth.sh
+[source,shell]
+.install.sh
 ----
+#!/usr/bin/env zsh
+
+export INFRA_REPO_NAME="demo-infra"
+export ENV_REPO_NAME="demo-environment"
+
+export INFRA_GIT="https://github.com/vitech-team/$INFRA_REPO_NAME.git"
+export ENV_GIT="https://github.com/vitech-team/$ENV_REPO_NAME.git"
+
+export TF_VAR_jx_bot_username=XXX
+export TF_VAR_jx_bot_token=XXX
+
+export CLUSTER_NAME="demo-time"
+export GCP_PROJECT="XXX"
+export ZONE="europe-west1-c"
+export MIN_NODE_COUNT="4"
+export FORCE_DESTROY="false"
+
+export green="\e[32m"
+export nrm="\e[39m"
+
+git clone $INFRA_GIT
+git clone $ENV_GIT
+
+cd $INFRA_REPO_NAME
+
+rm values.auto.tfvars
+cat <<EOF >> values.auto.tfvars
+resource_labels = { "provider" : "jx" }
+jx_git_url = "${ENV_GIT}"
+gcp_project = "${GCP_PROJECT}"
+cluster_name = "${CLUSTER_NAME}"
+cluster_location = "${ZONE}"
+force_destroy = "${FORCE_DESTROY}"
+min_node_count = "${MIN_NODE_COUNT}"
+EOF
+
+git commit -a -m "fix: configure cluster repository and project"
+git push
+
+terraform init
+terraform apply
+
+echo -e "${green}Setup kubeconfig...${nrm}"
+gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${ZONE}" --project "${GCP_PROJECT}"
+
+echo -e "For vault root token use: ${green}kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode${nrm}"
+echo "Taling logs..."
+jx admin log
+
+echo -e "${green}Okay, now we creating new key for service account...${nrm}"
+gcloud iam service-accounts keys create keyfile.json --iam-account "${CLUSTER_NAME}-tekton@${GCP_PROJECT}.iam.gserviceaccount.com"
 SECRETNAME=docker-registry-auth
 kubectl create secret docker-registry $SECRETNAME \
   --docker-server=https://gcr.io \
   --docker-username=_json_key \
   --docker-email=sdlc@vitechteam.com \
-  --docker-password="$(cat key.json)"
+  --docker-password="$(cat keyfile.json)" \
+  --namespace=jx
+kubectl label secret $SECRETNAME secret.jenkins-x.io/replica-source=true --namespace=jx
 
-kubectl label  secret $SECRETNAME secret.jenkins-x.io/replica-source=true
+jx namespace jx
 ----
 
-==== Verify
-* Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
+==== 4. Populate secrets
+Fist we need start vault proxy
+[source,shell]
+.sec-vault-start.sh
+----
+jx secret vault portforward
+----
+
+===== 4.1 Auto populate secrets
+[source,shell]
+.sec-auto-populate.sh
+----
+jx secret populate
+----
+
+===== 4.2 Populate required secrets
+[source,bash]
+.sec-required-populate.sh
+----
+jx secret edit -f slack
+
+jx secret edit -f snyk
+
+jx secret edit -f sonar
+----
+
+NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
+NOTE: Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
 
 
-==== Configure Slack Notifications
-===== Alertmanager
-* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+===== 4.3 Verify secrets
+Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
 
-===== Large Test Notification
-If you wanna change Large test execution message to slack
 
-* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. See example `charts/dev/secret/secret-schema.yaml`
-** You can use  next variables what can be populated automatically `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`"
+==== 5. Create application based on SDLC quickstart
+===== 5.1 Spring ?
+If you need some REST API backend service use template with name: `vitech-sdlc-backend`
 
-=== Configure Large Tests
-Currently, we have only Large Tests implementation only based https://webdriver.io[WebdriverIO].
+[source,shell]
+.quick-start-backend.sh
+----
+YOUR_ORG_NAME="vitech-team"
+jx project quickstart --pack="spring-gradle" --org="${YOUR_ORG_NAME}"
+----
+
+===== 5.2 Angular ?
+If you need frontend application on Angular use: `vitech-sdlc-frontend`
+
+[source,shell]
+.quickstart-forntend.sh
+----
+YOUR_ORG_NAME="vitech-team"
+jx project quickstart --pack="angular" --org="${YOUR_ORG_NAME}"
+----
+
+After setup you need edit default configs in `environments` folder.
+
+* keycloak url: `kubectrl get ingress -n keycloak`
+* change backend service name in `nginx.conf`
+
+== Enable Large Tests
+Currently, we have only Large Tests implementation based https://webdriver.io[WebdriverIO].
 We added a few steps to `release` and `pullrequest` pipelines:
-# Check if large test been executed on *Staging* before promote it on Production *environment*
-# Execute *Large Tests* after changes been applied on environment like Production.
 
-==== Enable Large Tests
+* Check if large test been executed on *Staging* before promote it on Production *environment*
+* Execute *Large Tests* after changes been applied on environment like Production.
+
+Foe enabling:
+
 * open `.lighthouse/large-test/triggers.yaml` and change: `always_run: false`, `optional: false` to `true`.
 * open `.lighthouse/jenkins-x/release.yaml` and uncomment commented tasks: ` large-test-prepare-and-check` and `large-test-execute`
 ** change large test image name property: `LARGE_REPORTS_IMAGE`
@@ -122,9 +211,9 @@ We added a few steps to `release` and `pullrequest` pipelines:
 
 
 == Example Apps
-* Frontend app example
-* Backend example
-* Large test example
+* https://github.com/vitech-team/mood-feed-frontend[Frontend app example]
+* https://github.com/vitech-team/mood-feed-backend[Backend example]
+* https://github.com/vitech-team/mood-feed-test[Large test example]
 
 == Pipelines
 === Pipelines catalog and pack
@@ -138,6 +227,17 @@ All tasks are in sync with https://github.com/vitech-team/tekton-pipelines-catal
 For more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
 
 NOTE: for more information about pipelines on JX see: https://jenkins-x.io/docs/v3/develop/pipeline-catalog/
+
+== Configure Slack Notifications
+=== Alertmanager
+* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+
+==== Large Test Notification
+If you wanna change Large test execution message to slack
+
+* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. See example `charts/dev/secret/secret-schema.yaml`
+** You can use  next variables what can be populated automatically `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`
+
 
 == Runbook
 [[runbook-vault]]
