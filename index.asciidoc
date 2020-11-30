@@ -111,6 +111,7 @@ include::scripts/sec-required-populate.sh[]
 ----
 
 NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
+
 NOTE: Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
 
 
@@ -161,14 +162,13 @@ NOTE: more information about pipelines on JX see https://jenkins-x.io/docs/v3/de
 
 == Large Tests
 
-=== Enable Large Tests
 Currently, we have only Large Tests implementation based https://webdriver.io[WebdriverIO].
 We added a few steps to `release` and `pullrequest` pipelines:
 
 * Check if large test been executed on *Staging* before promote it on Production *environment*
 * Execute *Large Tests* after changes been applied on environment like Production.
 
-Foe enabling:
+=== Enable
 
 * open `.lighthouse/large-test/triggers.yaml` and change: `always_run: false`, `optional: false` to `true`.
 * open `.lighthouse/jenkins-x/release.yaml` and uncomment commented tasks: ` large-test-prepare-and-check` and `large-test-execute`
