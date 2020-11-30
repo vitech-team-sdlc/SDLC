@@ -7,6 +7,7 @@
 :allow-uri-read:
 :safe: unsafe
 :source-highlighter: rouge
+:scriptsdir: scripts
 
 = SDLC
 
@@ -31,11 +32,11 @@ image:images/architecture.png[]
 
 image:https://lucid.app/publicSegments/view/6a2266b4-6082-4c3f-b5e7-b3955359de78/image.png[]
 
-=== Pull Request pipeline
-image:https://lucid.app/publicSegments/view/31739cad-3775-43a6-acb4-9400384732ca/image.png[width=600]
-
-=== Release
-image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9/image.png[width=600]
+//=== Pull Request pipeline
+//image:https://lucid.app/publicSegments/view/31739cad-3775-43a6-acb4-9400384732ca/image.png[width=600]
+//
+//=== Release
+//image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9/image.png[width=600]
 
 === Stack
 * https://jenkins-x.io[Jenkins X] - CORE
@@ -54,6 +55,7 @@ image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9
 * https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
 * https://googlecontainertools.github.io/kpt/[Kpt]
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
+** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Enable workload identity for k8s cluster]
 * generate Snyk https://snyk.io/blog/service-accounts/[token]
 * generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
 * generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
@@ -72,100 +74,47 @@ Open following link and generate repo based on template: https://github.com/vite
 [source,shell]
 .install.sh
 ----
-#!/usr/bin/env zsh
-
-export INFRA_REPO_NAME="demo-infra"
-export ENV_REPO_NAME="demo-environment"
-
-export INFRA_GIT="https://github.com/vitech-team/$INFRA_REPO_NAME.git"
-export ENV_GIT="https://github.com/vitech-team/$ENV_REPO_NAME.git"
-
-export TF_VAR_jx_bot_username=XXX
-export TF_VAR_jx_bot_token=XXX
-
-export CLUSTER_NAME="demo-time"
-export GCP_PROJECT="XXX"
-export ZONE="europe-west1-c"
-export MIN_NODE_COUNT="4"
-export FORCE_DESTROY="false"
-
-export green="\e[32m"
-export nrm="\e[39m"
-
-git clone $INFRA_GIT
-git clone $ENV_GIT
-
-cd $INFRA_REPO_NAME
-
-rm values.auto.tfvars
-cat <<EOF >> values.auto.tfvars
-resource_labels = { "provider" : "jx" }
-jx_git_url = "${ENV_GIT}"
-gcp_project = "${GCP_PROJECT}"
-cluster_name = "${CLUSTER_NAME}"
-cluster_location = "${ZONE}"
-force_destroy = "${FORCE_DESTROY}"
-min_node_count = "${MIN_NODE_COUNT}"
-EOF
-
-git commit -a -m "fix: configure cluster repository and project"
-git push
-
-terraform init
-terraform apply
-
-echo -e "${green}Setup kubeconfig...${nrm}"
-gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${ZONE}" --project "${GCP_PROJECT}"
-
-echo -e "For vault root token use: ${green}kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode${nrm}"
-echo "Taling logs..."
-jx admin log
-
-echo -e "${green}Okay, now we creating new key for service account...${nrm}"
-gcloud iam service-accounts keys create keyfile.json --iam-account "${CLUSTER_NAME}-tekton@${GCP_PROJECT}.iam.gserviceaccount.com"
-SECRETNAME=docker-registry-auth
-kubectl create secret docker-registry $SECRETNAME \
-  --docker-server=https://gcr.io \
-  --docker-username=_json_key \
-  --docker-email=sdlc@vitechteam.com \
-  --docker-password="$(cat keyfile.json)" \
-  --namespace=jx
-kubectl label secret $SECRETNAME secret.jenkins-x.io/replica-source=true --namespace=jx
-
-jx namespace jx
+include::{scriptsdir}/install.sh[]
 ----
+<1> infrastructure repository name
+<2> environment repository name
+<3> infra. and env. repo URLs
+<4> GitHub user name and token. *User should habe settings permission to all repositories*
+<5> cluster name
+<6> GCP project id
+<7> cluster zone: https://cloud.google.com/compute/docs/regions-zones#available
+<8> default node count
+<9> if buckets and PVCs should be deleted in case of `terraform destroy` command
+<10> store cluster configs in file. for more configs see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs
 
 ==== 4. Populate secrets
+===== 4.1 Create vault proxy
 Fist we need start vault proxy
 [source,shell]
 .sec-vault-start.sh
 ----
-jx secret vault portforward
+include::{scriptsdir}/sec-vault-start.sh[]
 ----
 
-===== 4.1 Auto populate secrets
+===== 4.2 Auto populate secrets
 [source,shell]
 .sec-auto-populate.sh
 ----
-jx secret populate
+include::{scriptsdir}/sec-auto-populate.sh[]
 ----
 
-===== 4.2 Populate required secrets
+===== 4.3 Populate required secrets
 [source,bash]
 .sec-required-populate.sh
 ----
-jx secret edit -f slack
-
-jx secret edit -f snyk
-
-jx secret edit -f sonar
+include::scripts/sec-required-populate.sh[]
 ----
 
 NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
 NOTE: Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
 
 
-===== 4.3 Verify secrets
+===== 4.4 Verify secrets
 Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
 
 
@@ -176,8 +125,7 @@ If you need some REST API backend service use template with name: `vitech-sdlc-b
 [source,shell]
 .quick-start-backend.sh
 ----
-YOUR_ORG_NAME="vitech-team"
-jx project quickstart --pack="spring-gradle" --org="${YOUR_ORG_NAME}"
+include::{scriptsdir}/quick-start-backend.sh[]
 ----
 
 ===== 5.2 Angular ?
@@ -186,8 +134,7 @@ If you need frontend application on Angular use: `vitech-sdlc-frontend`
 [source,shell]
 .quickstart-forntend.sh
 ----
-YOUR_ORG_NAME="vitech-team"
-jx project quickstart --pack="angular" --org="${YOUR_ORG_NAME}"
+include::{scriptsdir}/quickstart-forntend.sh[]
 ----
 
 After setup you need edit default configs in `environments` folder.
@@ -195,7 +142,26 @@ After setup you need edit default configs in `environments` folder.
 * keycloak url: `kubectrl get ingress -n keycloak`
 * change backend service name in `nginx.conf`
 
-== Enable Large Tests
+== Pipelines
+=== Pipelines catalog and pack
+All shared tasks and packs stored in: https://github.com/vitech-team/tekton-pipelines-catalog
+
+==== Packs
+Custom packs: https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs
+
+All tasks, packs and pipelines are in sync with https://github.com/vitech-team/jx3-gke-vault[environment repository] via https://googlecontainertools.github.io/kpt/[Kpt].
+
+NOTE: more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
+NOTE: more information about pipelines on JX see https://jenkins-x.io/docs/v3/develop/pipeline-catalog/[JX Pipeline Docs]
+
+== Configure Slack Notifications
+=== Alertmanager
+* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+
+
+== Large Tests
+
+=== Enable Large Tests
 Currently, we have only Large Tests implementation based https://webdriver.io[WebdriverIO].
 We added a few steps to `release` and `pullrequest` pipelines:
 
@@ -209,41 +175,48 @@ Foe enabling:
 ** change large test image name property: `LARGE_REPORTS_IMAGE`
 ** change your app URLs properties: `APP_URL_STAGING`, `APP_URL_PRODUCTION`, if you have more environments just add additional property like: `APP_URL_XXX`
 
+=== Selenium
+For selenium hub config use: `charts/dev/keycloak/values.yaml.gotmpl`.
+List of all configs: https://github.com/helm/charts/tree/master/stable/selenium#configuration
+
+=== Slack notification
+If you wanna change Large test execution message to slack, open and change: `charts/dev/secret/templates/slack-messages.yaml`
+
+NOTE: You can use  next variables what can be populated/replaced: `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`
+
+
+== Keycloak
+
+For Keycloak configuration use: `charts/dev/keycloak/values.yaml.gotmpl` file in env. repository list of keycloak configs: https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration
+
+== Metrics || Prometheus Operator
+Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-stack]
+
+* For custom monitors and gradana dashboard use folder: `charts/dev/prometheusmonitors/templates`
+* For metrics stack configuration use
+** `charts/prometheus-community/kube-prometheus-stack/values.yaml.gotmpl`
+** `charts/prometheus-community/kube-prometheus-stack/values.yaml`
 
 == Example Apps
 * https://github.com/vitech-team/mood-feed-frontend[Frontend app example]
 * https://github.com/vitech-team/mood-feed-backend[Backend example]
 * https://github.com/vitech-team/mood-feed-test[Large test example]
 
-== Pipelines
-=== Pipelines catalog and pack
-All shared tasks and packs stored in: https://github.com/vitech-team/tekton-pipelines-catalog
-
-==== Packs
-Custom packs: https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs
-
-==== Tasks
-All tasks are in sync with https://github.com/vitech-team/tekton-pipelines-catalog[environment repository] via https://googlecontainertools.github.io/kpt/[Kpt].
-For more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
-
-NOTE: for more information about pipelines on JX see: https://jenkins-x.io/docs/v3/develop/pipeline-catalog/
-
-== Configure Slack Notifications
-=== Alertmanager
-* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
-
-==== Large Test Notification
-If you wanna change Large test execution message to slack
-
-* In vault find `slack/SLACK_LARGE_TEST_FAILED_MSG`  or `slack/SLACK_LARGE_TEST_SUCCESS_MSG` and replace with your own template. See example `charts/dev/secret/secret-schema.yaml`
-** You can use  next variables what can be populated automatically `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`
-
-
 == Runbook
+
+[[runbook-cluster-delte]]
+=== cluster delete
+
+* for the cluster delete `cd` to your infra. repository and execute `terraform destroy`
+
 [[runbook-vault]]
 === Vault
 
 * For port forward Vault type: `jx secret vault portforward` - after that you can rich Vault at https://localhost:8200
 * Vault root token can be found in secret: `vault-unseal-keys`, key: `vault-root`
+
+[[runbook-keycloak]]
+=== Keycloak
+* keycloak url: `kubectrl get ingress -n keycloak`
 
 
