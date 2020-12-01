@@ -26,6 +26,8 @@ ifdef::env-github[]
 endif::[]
 
 = SDLC
+Doc Writer <sdlc@vitechteam.com>
+v0.1.0, 2020-12-01
 
 toc::[]
 

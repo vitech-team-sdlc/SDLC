@@ -135,6 +135,23 @@ If their run takes too long -- it's expected to have separate **Smoke/Sanity tes
 * NFRs gate in **Continuous Deployment** pipeline. It's expected that desired/existed application benchmarks have
 been already collected by performance tests and put as a NFR's thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.
 
+=== Versions
+https://semver.org[Semantic Versioning]
+
+Given a version number `MAJOR.MINOR.PATCH`, increment the:
+
+* *MAJOR* - version when you make incompatible API changes,
+* *MINOR* - version when you add functionality in a backwards compatible manner, and
+* *PATCH* - version when you make backwards compatible bug fixes.
+
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+Example:
+----
+1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
+----
+
+Version change should be driven by commit messages like described in https://www.conventionalcommits.org/en/v1.0.0/[Conventional Commits]
 
 [[roles]]
 === Roles

@@ -41,5 +41,5 @@ NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Conti
 * https://tekton.dev[Tekton] - CI/CD
 * https://kubernetes.io[Kubernetes]
 * https://www.terraform.io[Terraform]
-* https://www.keycloak.org[Keycloak] - OpenId provider
+* https://www.keycloak.org[Keycloak] - Open Source Identity and Access Management
 * https://webdriver.io[WebdriverIO] - Large test framework
