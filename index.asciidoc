@@ -35,12 +35,12 @@ toc::[]
 === Architecture
 ==== Simple view
 ++++
-<iframe style="border:none" width="100%" height="450" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
+<iframe style="border:none" width="100%" height="550" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
 ++++
 
 ==== Extended
 ++++
-<iframe style="border:none" width="100%" height="450" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
+<iframe style="border:none" width="100%" height="550" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
 ++++
 
 === CI/CD flow
