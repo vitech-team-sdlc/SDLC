@@ -1,0 +1,143 @@
+== Principle
+=== Trunk Based Development (Branching)
+A source-control branching model, where developers collaborate on code in a single branch called ‘trunk’,
+resist any pressure to create other long-lived development branches by employing documented techniques.
+They, therefore, avoid merge hell, do not break the build, and live happily ever after.
+In some cases, they create short-lived feature branches, but it is not welcome.
+
+Let’s have a look at the trunk-based development workflow.
+
+++++
+<iframe style="border:none" width="100%" height="900px" src="https://whimsical.com/embed/95zX1zeN2DCPYAo4an3xXz"></iframe>
+++++
+
+Typically we use  **Scaled Trunk-Based Development**
+
+==== Best Practices
+* Only fast forward merges to the trunk.
+* Disallow pushing to the trunk.
+* Machine readable meaning to commit messages.
+* _Merge squash your multiple changes in your short life branches._
+* _Rebasing master against your short-lived branch to keep it up to date is best, do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history._
+*  Feature branches must be short-lived.
+*  If you are working from a ticketing system, make sure to first mention the ticket number in your commit, and dynamically link them if possible in your repo tool.
+* Keep your commit messages as concise as possible, insofar as they make sense.
+* _You shouldn't do hotfix in this day and age if you can avoid it, it's best to fix forward and not go back, if there has been another feature released since then that you don't want to be included, then disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your life and your repo._
+*  Try and understand git commands and internals first before using graphic tools like git "Kraken". There is nothing wrong with them, they can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.
+* Don't ever commit secrets of any king to the repository  -**EVER**.
+
+NOTE: More info you can get https://trunkbaseddevelopment.com/[here] and https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f[here]
+
+=== Quality Gateway
+The **Quality Gateway** is an organizational\infrastructure point through which all product code must pass.
+The intention of having gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
+thereby preventing incorrect code from passing from the local codebase to a shared codebase.
+To get through the quality gateway code must satisfy a number of <<tests>>.
+The tests are devised to make sure that the requirement is an accurate statement of the business needs.
+
+==== Quality Gates
+
+* Verification of component versions `local`.
+* Code Compilation `local`.
+* <<small-test>> `local`.
+* Static analysis `local`.
+* <<medium-test>> `local`.
+* Code Compilation `remote`.
+* Static analysis `remote`.
+* <<medium-test>> `remote`. _Optional if acceptable by 10 minutes rule_
+* <<large-test>> `remote`.
+
+[[tests]]
+=== Test (Test case)
+The **test case** is a specification of the inputs, execution conditions, testing procedure, and expected results that
+define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular
+program path or to verify compliance with a specific requirement. Test cases underlie testing that is methodical rather than haphazard.
+A battery of test cases can be built to produce the desired coverage of the software being tested.
+Formally defined test cases allow the same tests to be run repeatedly against successive versions of the software,
+allowing for effective and consistent regression testing.
+
+Google practices the language of the small, medium, and large tests, featuring scope over form,
+instead of marking between code, integration, and system testing.
+According to the book https://www.amazon.com/Google-Tests-Software-James-Whittaker/dp/0321803027[How Google Tests Software], we define three types of test:
+
+* <<small-test>> - covers a single unit of code in a completely faked environment. `unit` tests
+* <<medium-test>> - covers multiple and interacting units of code in a faked environment. `integration`, `capability` tests
+* <<large-test>> - covers any number of units of code in the real integrated environment close to production one with real and not faked resources.
+`E2E`, `Smoke`, `Sanity`, `Functional`, `NFR` tests
+
+[[small-test]]
+==== Small Tests
+**Small tests** execute the code within a single function or module.
+The focus is on typical functional issues, data corruption, error conditions, and off-by-one mistakes.
+_Small tests are of short duration, usually running in seconds or less._
+
+**Small Tests** are **Unit Tests** in testing terminology.
+
+They are most likely written by an <<roles-swe, SWE>>, less often by a <<roles-swe, SWE>>,
+and hardly ever by <<roles-tes, TEs>>. Small tests usually require mocks and faked environments to run.
+(Mocks and fakes are stubs—substitutes for actual functions—that act as placeholders for dependencies that might not exist,
+are too buggy to be reliable, or too difficult to emulate error conditions.) [TEs](https://github.com/vitech-team/SDLC/wiki/Glossary)
+rarely write small tests but might run them when they are trying to diagnose a particular failure.
+
+The question a small test attempts to answer is, **"Does this code do what it is supposed to do?"**.
+
+_Small Tests are to be running during **test** build phase in **Continuous Integration** pipeline._
+
+IMPORTANT: Test that doesn't require dependency on external resources (file system, database, network, wiremocks, another OS process) is a small one.
+
+[[medium-test]]
+==== Medium Tests
+**Medium tests** are regularly automated and involve a pair or more interacting features.
+_The focus is on testing the interaction between features_ that call each other or interact directly, usually,
+we call these nearest neighbor functions. <<roles-set, SETs>> support the development of these tests early in the product cycle as individual
+features are completed and <<roles-swe, SWEs>> are heavily involved in writing, debugging, and maintaining the actual tests.
+If a medium test fails or breaks, the developer takes care of it autonomously.
+
+In a majority of cases <<medium-test>> reflect **Integration Tests** in testing terminology.
+
+Later in the development cycle, <<roles-tes, TEs>> can execute medium tests either manually (in the event the test is difficult or prohibitively costly to automate) or with automation.
+
+The question a medium test answer is, **"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"**.
+
+For a specific function under test, neighbor function could be : **another component, module, network interface, file system, database, message broker, storage, etc**.
+In majority of cases medium tests rely on external process running on the same host/VM/container.
+Good example of external process is docker service running on the same host/VM with test-runner process, what can be utilized by https://www.testcontainers.org/[testcontainers] framework.
+
+_Medium Tests must be separated from Small Tests in a project structure.
+They are to be running during **integration-test** build phase in **Continuous Integration** pipeline.
+Test Coverage tools should have separate reports for Medium Tests._
+
+**It's expected that medium tests shouldn't run longer than 5-10 minutes. Majority of time is usually spent on a dependent processes start, but once they are running - tests should complete fast.**
+
+[[large-test]]
+==== Large Tests
+
+**Large tests** are running over component(s) deployed to environment by the same **Continuous Deployment** pipeline that deploys to production.
+
+**Large Tests** can be reflected by following test suites:
+
+* End-To-End
+* Functional
+* Load/Stress/Performance (NFR gates)
+* Security
+* Smoke/Sanity
+* any other ones which are running over deployed components
+
+The question a large test attempts to answer is, **“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”**.
+
+Large Tests tend to be much slower than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.
+
+Possible phases/places where **Large Tests** can be running :
+
+* Pull Requests checks (in case if they are relatively fast and overall PR time doesn't go beyond ~15mins)
+* Functional Test Suite in **Continuous Deployment** pipeline (after-deployment step).
+If their run takes too long -- it's expected to have separate **Smoke/Sanity test suite** extracted for that purpose and Functional ones running by separate pipeline.
+* NFRs gate in **Continuous Deployment** pipeline. It's expected that desired/existed application benchmarks have
+been already collected by performance tests and put as a NFR's thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.
+
+
+[[roles]]
+=== Roles
+* [[roles-swe]]**SWE** -Software Engineer.
+* [[roles-set]]**SET** -Software engineer in Testing. This person is responsible for the complete design of the test cases and to maintain them.
+* [[roles-tes]]**TEs** -Test engineers.

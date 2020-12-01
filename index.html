@@ -656,7 +656,8 @@ pre.rouge {
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#overview">Overview</a>
+<li><a href="#overview">Motivation</a></li>
+<li><a href="#_overview">Overview</a>
 <ul class="sectlevel2">
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_cicd-flow">CI/CD flow</a></li>
@@ -667,39 +668,22 @@ pre.rouge {
 <ul class="sectlevel2">
 <li><a href="#setup">Prerequisites</a></li>
 <li><a href="#_setup">Setup</a></li>
+<li><a href="#_customization">Customization</a></li>
 </ul>
 </li>
-<li><a href="#_pipelines">Pipelines</a>
+<li><a href="#_principle">Principle</a>
 <ul class="sectlevel2">
-<li><a href="#_pipelines-catalog-and-pack">Pipelines catalog and pack</a></li>
-</ul>
-</li>
-<li><a href="#_large-tests">Large Tests</a>
-<ul class="sectlevel2">
-<li><a href="#_enable">Enable</a></li>
-<li><a href="#_selenium">Selenium</a></li>
-<li><a href="#_slack-notification">Slack notification</a></li>
-</ul>
-</li>
-<li><a href="#_keycloak">Keycloak</a></li>
-<li><a href="#_metrics">Metrics</a>
-<ul class="sectlevel2">
-<li><a href="#_alertmanager">Alertmanager</a></li>
-</ul>
-</li>
-<li><a href="#_example-apps">Example Apps</a></li>
-<li><a href="#_runbook">Runbook</a>
-<ul class="sectlevel2">
-<li><a href="#runbook-cluster-delte">Сluster delete</a></li>
-<li><a href="#runbook-vault">Vault</a></li>
-<li><a href="#runbook-keycloak">Keycloak</a></li>
+<li><a href="#_trunk-based-development-branching">Trunk Based Development (Branching)</a></li>
+<li><a href="#_quality-gateway">Quality Gateway</a></li>
+<li><a href="#tests">Test (Test case)</a></li>
+<li><a href="#roles">Roles</a></li>
 </ul>
 </li>
 <li><a href="#_other">Other</a>
 <ul class="sectlevel2">
-<li><a href="#_sdlc-glossary">SDLC glossary</a></li>
 <li><a href="#_github-project">GitHub project</a></li>
 <li><a href="#_diagrams">Diagrams</a></li>
+<li><a href="#_example-apps">Example Apps</a></li>
 </ul>
 </li>
 </ul>
@@ -712,22 +696,95 @@ pre.rouge {
 </div>
 </div>
 <div class="sect1">
-<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
+<h2 id="overview"><a class="anchor" href="#overview"></a>Motivation</h2>
 <div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>High Performer</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Deployment frequency - Releasing to production very frequently</p>
+</li>
+<li>
+<p>Lead time for changes - Low cycle time in ideas becoming production release code</p>
+</li>
+<li>
+<p>Mean time to recovery - Being able to recover in production quickly</p>
+</li>
+<li>
+<p>Change failure rate - Minimizing the failures that are incurred from changes</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Creating a <strong>blame-free environment</strong>, striving to learn from failures.</p>
+</li>
+<li>
+<p><strong>Employee satisfaction</strong> - keep people motivated and inspired by using modern and effective tools and processes</p>
+</li>
+<li>
+<p><span class="line-through">Reinvent</span> a wheel</p>
+</li>
+<li>
+<p><strong>reduce</strong> time to start <strong>new project</strong></p>
+</li>
+<li>
+<p><strong>re-use knowledge</strong> and best practices in a predicted and <strong>manageable ways</strong></p>
+</li>
+<li>
+<p><strong>build community</strong> around so that members constantly improve and make it better</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Inspired by <a href="https://www.goodreads.com/book/show/35747076-accelerate">Accelerate</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Current solution build on top of <a href="https://jenkins-x.io">Jenkins X</a> so please take a look before you jump in. <code>:)</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes so they can focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="_architecture"><a class="anchor" href="#_architecture"></a>Architecture</h3>
 <div class="sect3">
 <h4 id="_simple-view"><a class="anchor" href="#_simple-view"></a>Simple view</h4>
-<iframe style="border:none" width="100%" height="550" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
+<iframe style="border:none" width="100%" height="550px" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
 </div>
 <div class="sect3">
 <h4 id="_extended"><a class="anchor" href="#_extended"></a>Extended</h4>
-<iframe style="border:none" width="100%" height="550" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
+<iframe style="border:none" width="100%" height="850px" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_cicd-flow"><a class="anchor" href="#_cicd-flow"></a>CI/CD flow</h3>
-<iframe allowfullscreen frameborder="0" style="width: 100%; height: 550px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
+<iframe allowfullscreen frameborder="0" style="width: 100%; height: 750px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
 </div>
 <div class="sect2">
 <h3 id="_stack"><a class="anchor" href="#_stack"></a>Stack</h3>
@@ -954,11 +1011,7 @@ jx namespace jx
 <div class="listingblock">
 <div class="title">sec-required-populate.sh</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">jx secret edit <span class="nt">-f</span> slack
-
-jx secret edit <span class="nt">-f</span> snyk
-
-jx secret edit <span class="nt">-f</span> sonar</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">Unresolved directive <span class="k">in </span>docs/setup.adoc - include::scripts/sec-required-populate.sh[]</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1024,18 +1077,18 @@ jx project quickstart <span class="nt">--pack</span><span class="o">=</span><spa
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_pipelines"><a class="anchor" href="#_pipelines"></a>Pipelines</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_pipelines-catalog-and-pack"><a class="anchor" href="#_pipelines-catalog-and-pack"></a>Pipelines catalog and pack</h3>
+<h3 id="_customization"><a class="anchor" href="#_customization"></a>Customization</h3>
+<div class="sect3">
+<h4 id="_pipelines"><a class="anchor" href="#_pipelines"></a>Pipelines</h4>
+<div class="sect4">
+<h5 id="_pipelines-catalog-and-pack"><a class="anchor" href="#_pipelines-catalog-and-pack"></a>Pipelines catalog and pack</h5>
 <div class="paragraph">
 <p>All shared tasks and packs stored in: <a href="https://github.com/vitech-team/tekton-pipelines-catalog" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog</a></p>
 </div>
-<div class="sect3">
-<h4 id="_packs"><a class="anchor" href="#_packs"></a>Packs</h4>
+</div>
+<div class="sect4">
+<h5 id="_packs"><a class="anchor" href="#_packs"></a>Packs</h5>
 <div class="paragraph">
 <p>Custom packs: <a href="https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs</a></p>
 </div>
@@ -1068,11 +1121,8 @@ more information about pipelines on JX see <a href="https://jenkins-x.io/docs/v3
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_large-tests"><a class="anchor" href="#_large-tests"></a>Large Tests</h2>
-<div class="sectionbody">
+<div class="sect3">
+<h4 id="_large-tests"><a class="anchor" href="#_large-tests"></a>Large Tests</h4>
 <div class="paragraph">
 <p>Currently, we have only Large Tests implementation based <a href="https://webdriver.io">WebdriverIO</a>.
 We added a few steps to <code>release</code> and <code>pullrequest</code> pipelines:</p>
@@ -1087,8 +1137,8 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 </li>
 </ul>
 </div>
-<div class="sect2">
-<h3 id="_enable"><a class="anchor" href="#_enable"></a>Enable</h3>
+<div class="sect4">
+<h5 id="_enable"><a class="anchor" href="#_enable"></a>Enable</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1110,8 +1160,8 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_selenium"><a class="anchor" href="#_selenium"></a>Selenium</h3>
+<div class="sect4">
+<h5 id="_selenium"><a class="anchor" href="#_selenium"></a>Selenium</h5>
 <div class="paragraph">
 <p>For selenium hub config use:</p>
 </div>
@@ -1129,8 +1179,8 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 <p>List of all configs: <a href="https://github.com/helm/charts/tree/master/stable/selenium#configuration" class="bare">https://github.com/helm/charts/tree/master/stable/selenium#configuration</a></p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_slack-notification"><a class="anchor" href="#_slack-notification"></a>Slack notification</h3>
+<div class="sect4">
+<h5 id="_slack-notification"><a class="anchor" href="#_slack-notification"></a>Slack notification</h5>
 <div class="paragraph">
 <p>If you wanna change Large test execution message to slack, open and change: <code>charts/dev/secret/templates/slack-messages.yaml</code></p>
 </div>
@@ -1148,18 +1198,14 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_keycloak"><a class="anchor" href="#_keycloak"></a>Keycloak</h2>
-<div class="sectionbody">
+<div class="sect3">
+<h4 id="_keycloak"><a class="anchor" href="#_keycloak"></a>Keycloak</h4>
 <div class="paragraph">
 <p>For Keycloak configuration use: <code>charts/dev/keycloak/values.yaml.gotmpl</code> file in env. repository list of keycloak configs: <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration" class="bare">https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration</a></p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_metrics"><a class="anchor" href="#_metrics"></a>Metrics</h2>
-<div class="sectionbody">
+<div class="sect3">
+<h4 id="_metrics"><a class="anchor" href="#_metrics"></a>Metrics</h4>
 <div class="paragraph">
 <p>Metrics chart <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">kube-prometheus-stack</a></p>
 </div>
@@ -1183,10 +1229,11 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </li>
 </ul>
 </div>
-<div class="sect2">
-<h3 id="_alertmanager"><a class="anchor" href="#_alertmanager"></a>Alertmanager</h3>
+</div>
 <div class="sect3">
-<h4 id="_configure-slack-notifications"><a class="anchor" href="#_configure-slack-notifications"></a>Configure Slack Notifications</h4>
+<h4 id="_alertmanager"><a class="anchor" href="#_alertmanager"></a>Alertmanager</h4>
+<div class="sect4">
+<h5 id="_configure-slack-notifications"><a class="anchor" href="#_configure-slack-notifications"></a>Configure Slack Notifications</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1196,31 +1243,10 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_example-apps"><a class="anchor" href="#_example-apps"></a>Example Apps</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/vitech-team/mood-feed-frontend">Frontend app example</a></p>
-</li>
-<li>
-<p><a href="https://github.com/vitech-team/mood-feed-backend">Backend example</a></p>
-</li>
-<li>
-<p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_runbook"><a class="anchor" href="#_runbook"></a>Runbook</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="runbook-cluster-delte"><a class="anchor" href="#runbook-cluster-delte"></a>Сluster delete</h3>
+<div class="sect3">
+<h4 id="_runbook"><a class="anchor" href="#_runbook"></a>Runbook</h4>
+<div class="sect4">
+<h5 id="runbook-cluster-delte"><a class="anchor" href="#runbook-cluster-delte"></a>Сluster delete</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1229,8 +1255,8 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="runbook-vault"><a class="anchor" href="#runbook-vault"></a>Vault</h3>
+<div class="sect4">
+<h5 id="runbook-vault"><a class="anchor" href="#runbook-vault"></a>Vault</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1241,9 +1267,8 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="runbook-keycloak"><a class="anchor" href="#runbook-keycloak"></a>Keycloak</h3>
+<div class="sect5">
+<h6 id="runbook-keycloak"><a class="anchor" href="#runbook-keycloak"></a>Keycloak</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -1254,15 +1279,295 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_principle"><a class="anchor" href="#_principle"></a>Principle</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_trunk-based-development-branching"><a class="anchor" href="#_trunk-based-development-branching"></a>Trunk Based Development (Branching)</h3>
+<div class="paragraph">
+<p>A source-control branching model, where developers collaborate on code in a single branch called ‘trunk’,
+resist any pressure to create other long-lived development branches by employing documented techniques.
+They, therefore, avoid merge hell, do not break the build, and live happily ever after.
+In some cases, they create short-lived feature branches, but it is not welcome.</p>
+</div>
+<div class="paragraph">
+<p>Let’s have a look at the trunk-based development workflow.</p>
+</div>
+<iframe style="border:none" width="100%" height="900px" src="https://whimsical.com/embed/95zX1zeN2DCPYAo4an3xXz"></iframe>
+<div class="paragraph">
+<p>Typically we use  <strong>Scaled Trunk-Based Development</strong></p>
+</div>
+<div class="sect3">
+<h4 id="_best-practices"><a class="anchor" href="#_best-practices"></a>Best Practices</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Only fast forward merges to the trunk.</p>
+</li>
+<li>
+<p>Disallow pushing to the trunk.</p>
+</li>
+<li>
+<p><em>Merge squash your multiple changes in your short life branches.</em></p>
+</li>
+<li>
+<p><em>Rebasing master against your short-lived branch to keep it up to date is best, do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history.</em></p>
+</li>
+<li>
+<p>Feature branches must be short-lived.</p>
+</li>
+<li>
+<p>If you are working from a ticketing system, make sure to first mention the ticket number in your commit, and dynamically link them if possible in your repo tool.</p>
+</li>
+<li>
+<p>Keep your commit messages as concise as possible, insofar as they make sense.</p>
+</li>
+<li>
+<p><em>You shouldn&#8217;t do hotfix in this day and age if you can avoid it, it&#8217;s best to fix forward and not go back, if there has been another feature released since then that you don&#8217;t want to be included, then disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your life and your repo.</em></p>
+</li>
+<li>
+<p>Try and understand git commands and internals first before using graphic tools like git "Kraken". There is nothing wrong with them, they can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.</p>
+</li>
+<li>
+<p>Don&#8217;t ever commit secrets of any king to the repository  -<strong>EVER</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+More info you can get <a href="https://trunkbaseddevelopment.com/">here</a> and <a href="https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f">here</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quality-gateway"><a class="anchor" href="#_quality-gateway"></a>Quality Gateway</h3>
+<div class="paragraph">
+<p>The <strong>Quality Gateway</strong> is an organizational\infrastructure point through which all product code must pass.
+The intention of having gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
+thereby preventing incorrect code from passing from the local codebase to a shared codebase.
+To get through the quality gateway code must satisfy a number of <a href="#tests">Test (Test case)</a>.
+The tests are devised to make sure that the requirement is an accurate statement of the business needs.</p>
+</div>
+<div class="sect3">
+<h4 id="_quality-gates"><a class="anchor" href="#_quality-gates"></a>Quality Gates</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Verification of component versions <code>local</code>.</p>
+</li>
+<li>
+<p>Code Compilation <code>local</code>.</p>
+</li>
+<li>
+<p><a href="#small-test">Small Tests</a> <code>local</code>.</p>
+</li>
+<li>
+<p>Static analysis <code>local</code>.</p>
+</li>
+<li>
+<p><a href="#medium-test">Medium Tests</a> <code>local</code>.</p>
+</li>
+<li>
+<p>Code Compilation <code>remote</code>.</p>
+</li>
+<li>
+<p>Static analysis <code>remote</code>.</p>
+</li>
+<li>
+<p><a href="#medium-test">Medium Tests</a> <code>remote</code>. <em>Optional if acceptable by 10 minutes rule</em></p>
+</li>
+<li>
+<p><a href="#large-test">Large Tests</a> <code>remote</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tests"><a class="anchor" href="#tests"></a>Test (Test case)</h3>
+<div class="paragraph">
+<p>The <strong>test case</strong> is a specification of the inputs, execution conditions, testing procedure, and expected results that
+define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular
+program path or to verify compliance with a specific requirement. Test cases underlie testing that is methodical rather than haphazard.
+A battery of test cases can be built to produce the desired coverage of the software being tested.
+Formally defined test cases allow the same tests to be run repeatedly against successive versions of the software,
+allowing for effective and consistent regression testing.</p>
+</div>
+<div class="paragraph">
+<p>Google practices the language of the small, medium, and large tests, featuring scope over form,
+instead of marking between code, integration, and system testing.
+According to the book <a href="https://www.amazon.com/Google-Tests-Software-James-Whittaker/dp/0321803027">How Google Tests Software</a>, we define three types of test:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#small-test">Small Tests</a> - covers a single unit of code in a completely faked environment. <code>unit</code> tests</p>
+</li>
+<li>
+<p><a href="#medium-test">Medium Tests</a> - covers multiple and interacting units of code in a faked environment. <code>integration</code>, <code>capability</code> tests</p>
+</li>
+<li>
+<p><a href="#large-test">Large Tests</a> - covers any number of units of code in the real integrated environment close to production one with real and not faked resources.
+<code>E2E</code>, <code>Smoke</code>, <code>Sanity</code>, <code>Functional</code>, <code>NFR</code> tests</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="small-test"><a class="anchor" href="#small-test"></a>Small Tests</h4>
+<div class="paragraph">
+<p><strong>Small tests</strong> execute the code within a single function or module.
+The focus is on typical functional issues, data corruption, error conditions, and off-by-one mistakes.
+<em>Small tests are of short duration, usually running in seconds or less.</em></p>
+</div>
+<div class="paragraph">
+<p><strong>Small Tests</strong> are <strong>Unit Tests</strong> in testing terminology.</p>
+</div>
+<div class="paragraph">
+<p>They are most likely written by an <a href="#roles-swe">SWE</a>, less often by a <a href="#roles-swe">SWE</a>,
+and hardly ever by <a href="#roles-tes">TEs</a>. Small tests usually require mocks and faked environments to run.
+(Mocks and fakes are stubs—substitutes for actual functions—that act as placeholders for dependencies that might not exist,
+are too buggy to be reliable, or too difficult to emulate error conditions.) [TEs](<a href="https://github.com/vitech-team/SDLC/wiki/Glossary" class="bare">https://github.com/vitech-team/SDLC/wiki/Glossary</a>)
+rarely write small tests but might run them when they are trying to diagnose a particular failure.</p>
+</div>
+<div class="paragraph">
+<p>The question a small test attempts to answer is, <strong>"Does this code do what it is supposed to do?"</strong>.</p>
+</div>
+<div class="paragraph">
+<p><em>Small Tests are to be running during <strong>test</strong> build phase in <strong>Continuous Integration</strong> pipeline.</em></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Test that doesn&#8217;t require dependency on external resources (file system, database, network, wiremocks, another OS process) is a small one.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="medium-test"><a class="anchor" href="#medium-test"></a>Medium Tests</h4>
+<div class="paragraph">
+<p><strong>Medium tests</strong> are regularly automated and involve a pair or more interacting features.
+<em>The focus is on testing the interaction between features</em> that call each other or interact directly, usually,
+we call these nearest neighbor functions. <a href="#roles-set">SETs</a> support the development of these tests early in the product cycle as individual
+features are completed and <a href="#roles-swe">SWEs</a> are heavily involved in writing, debugging, and maintaining the actual tests.
+If a medium test fails or breaks, the developer takes care of it autonomously.</p>
+</div>
+<div class="paragraph">
+<p>In a majority of cases <a href="#medium-test">Medium Tests</a> reflect <strong>Integration Tests</strong> in testing terminology.</p>
+</div>
+<div class="paragraph">
+<p>Later in the development cycle, <a href="#roles-tes">TEs</a> can execute medium tests either manually (in the event the test is difficult or prohibitively costly to automate) or with automation.</p>
+</div>
+<div class="paragraph">
+<p>The question a medium test answer is, <strong>"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"</strong>.</p>
+</div>
+<div class="paragraph">
+<p>For a specific function under test, neighbor function could be : <strong>another component, module, network interface, file system, database, message broker, storage, etc</strong>.
+In majority of cases medium tests rely on external process running on the same host/VM/container.
+Good example of external process is docker service running on the same host/VM with test-runner process, what can be utilized by <a href="https://www.testcontainers.org/">testcontainers</a> framework.</p>
+</div>
+<div class="paragraph">
+<p><em>Medium Tests must be separated from Small Tests in a project structure.
+They are to be running during <strong>integration-test</strong> build phase in <strong>Continuous Integration</strong> pipeline.
+Test Coverage tools should have separate reports for Medium Tests.</em></p>
+</div>
+<div class="paragraph">
+<p><strong>It&#8217;s expected that medium tests shouldn&#8217;t run longer than 5-10 minutes. Majority of time is usually spent on a dependent processes start, but once they are running - tests should complete fast.</strong></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="large-test"><a class="anchor" href="#large-test"></a>Large Tests</h4>
+<div class="paragraph">
+<p><strong>Large tests</strong> are running over component(s) deployed to environment by the same <strong>Continuous Deployment</strong> pipeline that deploys to production.</p>
+</div>
+<div class="paragraph">
+<p><strong>Large Tests</strong> can be reflected by following test suites:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>End-To-End</p>
+</li>
+<li>
+<p>Functional</p>
+</li>
+<li>
+<p>Load/Stress/Performance (NFR gates)</p>
+</li>
+<li>
+<p>Security</p>
+</li>
+<li>
+<p>Smoke/Sanity</p>
+</li>
+<li>
+<p>any other ones which are running over deployed components</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The question a large test attempts to answer is, <strong>“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Large Tests tend to be much slower than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.</p>
+</div>
+<div class="paragraph">
+<p>Possible phases/places where <strong>Large Tests</strong> can be running :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Pull Requests checks (in case if they are relatively fast and overall PR time doesn&#8217;t go beyond ~15mins)</p>
+</li>
+<li>
+<p>Functional Test Suite in <strong>Continuous Deployment</strong> pipeline (after-deployment step).
+If their run takes too long&#8201;&#8212;&#8201;it&#8217;s expected to have separate <strong>Smoke/Sanity test suite</strong> extracted for that purpose and Functional ones running by separate pipeline.</p>
+</li>
+<li>
+<p>NFRs gate in <strong>Continuous Deployment</strong> pipeline. It&#8217;s expected that desired/existed application benchmarks have
+been already collected by performance tests and put as a NFR&#8217;s thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="roles"><a class="anchor" href="#roles"></a>Roles</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a id="roles-swe"></a><strong>SWE</strong> -Software Engineer.</p>
+</li>
+<li>
+<p><a id="roles-set"></a><strong>SET</strong> -Software engineer in Testing. This person is responsible for the complete design of the test cases and to maintain them.</p>
+</li>
+<li>
+<p><a id="roles-tes"></a><strong>TEs</strong> -Test engineers.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_other"><a class="anchor" href="#_other"></a>Other</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_sdlc-glossary"><a class="anchor" href="#_sdlc-glossary"></a>SDLC glossary</h3>
-<div class="paragraph">
-<p><a href="https://github.com/vitech-team/SDLC/wiki/SDLC" class="bare">https://github.com/vitech-team/SDLC/wiki/SDLC</a></p>
-</div>
-</div>
 <div class="sect2">
 <h3 id="_github-project"><a class="anchor" href="#_github-project"></a>GitHub project</h3>
 <div class="paragraph">
@@ -1282,12 +1587,28 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </ul>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_example-apps"><a class="anchor" href="#_example-apps"></a>Example Apps</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/vitech-team/mood-feed-frontend">Frontend app example</a></p>
+</li>
+<li>
+<p><a href="https://github.com/vitech-team/mood-feed-backend">Backend example</a></p>
+</li>
+<li>
+<p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-12-01 15:49:26 +0200
+Last updated 2020-12-01 16:50:25 +0200
 </div>
 </div>
 </body>

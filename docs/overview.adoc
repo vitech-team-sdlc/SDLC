@@ -1,0 +1,45 @@
+[[overview]]
+== Motivation
+* *High Performer*
+** Deployment frequency - Releasing to production very frequently
+** Lead time for changes - Low cycle time in ideas becoming production release code
+** Mean time to recovery - Being able to recover in production quickly
+** Change failure rate - Minimizing the failures that are incurred from changes
+* Creating a *blame-free environment*, striving to learn from failures.
+* *Employee satisfaction* - keep people motivated and inspired by using modern and effective tools and processes
+* [.line-through]#Reinvent# a wheel
+* *reduce* time to start *new project*
+* *re-use knowledge* and best practices in a predicted and *manageable ways*
+* *build community* around so that members constantly improve and make it better
+
+NOTE: Inspired by https://www.goodreads.com/book/show/35747076-accelerate[Accelerate]
+
+== Overview
+Current solution build on top of https://jenkins-x.io[Jenkins X] so please take a look before you jump in. `:)`
+
+NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes so they can focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
+
+
+=== Architecture
+==== Simple view
+++++
+<iframe style="border:none" width="100%" height="550px" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
+++++
+
+==== Extended
+++++
+<iframe style="border:none" width="100%" height="850px" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
+++++
+
+=== CI/CD flow
+++++
+<iframe allowfullscreen frameborder="0" style="width: 100%; height: 750px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
+++++
+
+=== Stack
+* https://jenkins-x.io[Jenkins X] - CORE
+* https://tekton.dev[Tekton] - CI/CD
+* https://kubernetes.io[Kubernetes]
+* https://www.terraform.io[Terraform]
+* https://www.keycloak.org[Keycloak] - OpenId provider
+* https://webdriver.io[WebdriverIO] - Large test framework

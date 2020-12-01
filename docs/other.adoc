@@ -1,0 +1,15 @@
+== Other
+
+=== GitHub project
+https://github.com/vitech-team/SDLC/projects
+
+=== Diagrams
+
+* https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee
+* https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM
+
+
+=== Example Apps
+* https://github.com/vitech-team/mood-feed-frontend[Frontend app example]
+* https://github.com/vitech-team/mood-feed-backend[Backend example]
+* https://github.com/vitech-team/mood-feed-test[Large test example]

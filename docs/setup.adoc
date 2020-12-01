@@ -1,0 +1,93 @@
+:scriptsdir: ../scripts
+
+== Setup Cluster & Environment Repository
+
+[[setup]]
+=== Prerequisites
+* https://github.com/join[Create a git bot user] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
+* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI]
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
+* https://googlecontainertools.github.io/kpt/[Kpt]
+* https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
+** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Enable workload identity for k8s cluster]
+* generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
+* generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
+* generate Snyk https://snyk.io/blog/service-accounts/[token]
+
+=== Setup
+==== 1. Create Infrastructure Repository
+Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
+
+==== 2. Create Environment Repository
+Create environment repository: https://github.com/vitech-team/jx3-gke-vault
+
+==== 3. Prepare install script
+
+[source,shell]
+.install.sh
+----
+include::{scriptsdir}/install.sh[]
+----
+<1> infrastructure repository name
+<2> environment repository name
+<3> infra. and env. repo URLs
+<4> GitHub user name and token. *User should habe settings permission to all repositories*
+<5> cluster name
+<6> GCP project id
+<7> cluster zone: https://cloud.google.com/compute/docs/regions-zones#available
+<8> default node count
+<9> if buckets and PVCs should be deleted in case of `terraform destroy` command
+<10> store cluster configs in file. for more configs see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs
+
+==== 4. Populate secrets
+===== 4.1 Create vault proxy
+Fist we need start vault proxy
+[source,shell]
+.sec-vault-start.sh
+----
+include::{scriptsdir}/sec-vault-start.sh[]
+----
+
+===== 4.2 Auto populate secrets
+[source,shell]
+.sec-auto-populate.sh
+----
+include::{scriptsdir}/sec-auto-populate.sh[]
+----
+
+===== 4.3 Populate required secrets
+[source,bash]
+.sec-required-populate.sh
+----
+include::scripts/sec-required-populate.sh[]
+----
+
+NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
+
+===== 4.4 Verify secrets
+Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `slack`, etc...
+
+
+==== 5. Create application based on SDLC quickstart
+===== 5.1 Spring ?
+If you need some REST API backend service use template with name: `vitech-sdlc-backend`
+
+[source,shell]
+.quick-start-backend.sh
+----
+include::{scriptsdir}/quick-start-backend.sh[]
+----
+
+===== 5.2 Angular ?
+If you need frontend application on Angular use: `vitech-sdlc-frontend`
+
+[source,shell]
+.quickstart-forntend.sh
+----
+include::{scriptsdir}/quickstart-forntend.sh[]
+----
+
+After setup you need edit default configs in `environments` folder.
+
+* keycloak url: `kubectrl get ingress -n keycloak`
+* change backend service name in `nginx.conf`
