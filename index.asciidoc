@@ -1,6 +1,6 @@
 :icons: font
-:toc:
-:doctype: book
+:toc: left
+:page-layout: docs
 :sectanchors:
 :idseparator: -
 :data-uri:
@@ -12,13 +12,6 @@
 = SDLC
 
 toc::[]
-
-[[motivation]]
-== Motivation
-
-
-TBD :tada:
-
 
 [[overview]]
 == Overview
@@ -56,18 +49,16 @@ image:https://lucid.app/publicSegments/view/6a2266b4-6082-4c3f-b5e7-b3955359de78
 * https://googlecontainertools.github.io/kpt/[Kpt]
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
 ** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Enable workload identity for k8s cluster]
-* generate Snyk https://snyk.io/blog/service-accounts/[token]
 * generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
 * generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
+* generate Snyk https://snyk.io/blog/service-accounts/[token]
 
 === Setup
 ==== 1. Create Infrastructure Repository
-Open https://jenkins-x.io/docs/v3/getting-started/gke/[Jenkins X GKE] and select your cloud provider.
-
-NOTE: Currently, only GKE + Vault been tested.
+Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
 
 ==== 2. Create Environment Repository
-Open following link and generate repo based on template: https://github.com/vitech-team/jx3-gke-vault
+Create environment repository: https://github.com/vitech-team/jx3-gke-vault
 
 ==== 3. Prepare install script
 
@@ -112,11 +103,8 @@ include::scripts/sec-required-populate.sh[]
 
 NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
 
-NOTE: Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
-
-
 ===== 4.4 Verify secrets
-Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `snyk`, etc...
+Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `slack`, etc...
 
 
 ==== 5. Create application based on SDLC quickstart
@@ -153,12 +141,8 @@ Custom packs: https://github.com/vitech-team/tekton-pipelines-catalog/tree/maste
 All tasks, packs and pipelines are in sync with https://github.com/vitech-team/jx3-gke-vault[environment repository] via https://googlecontainertools.github.io/kpt/[Kpt].
 
 NOTE: more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
+
 NOTE: more information about pipelines on JX see https://jenkins-x.io/docs/v3/develop/pipeline-catalog/[JX Pipeline Docs]
-
-== Configure Slack Notifications
-=== Alertmanager
-* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
-
 
 == Large Tests
 
@@ -189,13 +173,18 @@ NOTE: You can use  next variables what can be populated/replaced: `${ENV}`, `${S
 
 For Keycloak configuration use: `charts/dev/keycloak/values.yaml.gotmpl` file in env. repository list of keycloak configs: https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration
 
-== Metrics || Prometheus Operator
+== Metrics
 Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-stack]
 
 * For custom monitors and gradana dashboard use folder: `charts/dev/prometheusmonitors/templates`
 * For metrics stack configuration use
 ** `charts/prometheus-community/kube-prometheus-stack/values.yaml.gotmpl`
 ** `charts/prometheus-community/kube-prometheus-stack/values.yaml`
+
+=== Alertmanager
+==== Configure Slack Notifications
+* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+
 
 == Example Apps
 * https://github.com/vitech-team/mood-feed-frontend[Frontend app example]
