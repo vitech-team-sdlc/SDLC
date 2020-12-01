@@ -17,19 +17,20 @@ toc::[]
 == Overview
 
 === Architecture
-See: https://whimsical.com/lines-2-8GKYgDts1C3ZKb3ccsrzpR
+==== Simple view
+++++
+<iframe style="border:none" width="100%" height="450" src="https://whimsical.com/embed/DGQcqfVJMY5CuP4z2QGU1s"></iframe>
+++++
 
-image:images/architecture.png[]
+==== Extended
+++++
+<iframe style="border:none" width="100%" height="450" src="https://whimsical.com/embed/8GKYgDts1C3ZKb3ccsrzpR"></iframe>
+++++
 
 === CI/CD flow
-
-image:https://lucid.app/publicSegments/view/6a2266b4-6082-4c3f-b5e7-b3955359de78/image.png[]
-
-//=== Pull Request pipeline
-//image:https://lucid.app/publicSegments/view/31739cad-3775-43a6-acb4-9400384732ca/image.png[width=600]
-//
-//=== Release
-//image:https://lucid.app/publicSegments/view/7af90a9b-0c46-470b-9b99-a9f151a0ddc9/image.png[width=600]
+++++
+<iframe allowfullscreen frameborder="0" style="width: 100%; height: 550px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
+++++
 
 === Stack
 * https://jenkins-x.io[Jenkins X] - CORE
@@ -160,7 +161,11 @@ We added a few steps to `release` and `pullrequest` pipelines:
 ** change your app URLs properties: `APP_URL_STAGING`, `APP_URL_PRODUCTION`, if you have more environments just add additional property like: `APP_URL_XXX`
 
 === Selenium
-For selenium hub config use: `charts/dev/keycloak/values.yaml.gotmpl`.
+For selenium hub config use:
+
+* `charts/dev/largetests/values.yaml.gotmpl`
+* `charts/dev/largetests/values.yaml`
+
 List of all configs: https://github.com/helm/charts/tree/master/stable/selenium#configuration
 
 === Slack notification
@@ -194,7 +199,7 @@ Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/char
 == Runbook
 
 [[runbook-cluster-delte]]
-=== cluster delete
+=== Сluster delete
 
 * for the cluster delete `cd` to your infra. repository and execute `terraform destroy`
 
@@ -207,5 +212,17 @@ Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/char
 [[runbook-keycloak]]
 === Keycloak
 * keycloak url: `kubectrl get ingress -n keycloak`
+
+== Other
+=== SDLC glossary
+https://github.com/vitech-team/SDLC/wiki/SDLC
+
+=== GitHub project
+https://github.com/vitech-team/SDLC/projects
+
+=== Diagrams
+
+* https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee
+* https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM
 
 
