@@ -1337,7 +1337,7 @@ In some cases, they create short-lived feature branches, but it is not welcome.<
 <p>Disallow pushing to the trunk.</p>
 </li>
 <li>
-<p>Machine readable meaning to commit messages.</p>
+<p>Machine-readable meaning to commit messages.</p>
 </li>
 <li>
 <p><em>Merge squash your multiple changes in your short life branches.</em></p>
@@ -1383,9 +1383,9 @@ More info you can get <a href="https://trunkbaseddevelopment.com/">here</a> and 
 <h3 id="_quality-gateway"><a class="anchor" href="#_quality-gateway"></a>Quality Gateway</h3>
 <div class="paragraph">
 <p>The <strong>Quality Gateway</strong> is an organizational\infrastructure point through which all product code must pass.
-The intention of having gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
+The intention of having a gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
 thereby preventing incorrect code from passing from the local codebase to a shared codebase.
-To get through the quality gateway code must satisfy a number of <a href="#tests">Test (Test case)</a>.
+To get through the quality gateway code must satisfy several <a href="#tests">Test (Test case)</a>.
 The tests are devised to make sure that the requirement is an accurate statement of the business needs.</p>
 </div>
 <div class="sect3">
@@ -1482,7 +1482,7 @@ rarely write small tests but might run them when they are trying to diagnose a p
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Test that doesn&#8217;t require dependency on external resources (file system, database, network, wiremocks, another OS process) is a small one.
+A test that doesn&#8217;t require dependency on external resources (file system, database, network, <a href="http://wiremock.org">wiremocks</a>, another OS process) is a small one.
 </td>
 </tr>
 </table>
@@ -1507,9 +1507,9 @@ If a medium test fails or breaks, the developer takes care of it autonomously.</
 <p>The question a medium test answer is, <strong>"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"</strong>.</p>
 </div>
 <div class="paragraph">
-<p>For a specific function under test, neighbor function could be : <strong>another component, module, network interface, file system, database, message broker, storage, etc</strong>.
-In majority of cases medium tests rely on external process running on the same host/VM/container.
-Good example of external process is docker service running on the same host/VM with test-runner process, what can be utilized by <a href="https://www.testcontainers.org/">testcontainers</a> framework.</p>
+<p>For a specific function under test, the neighbor function could be: <strong>another component, module, network interface, file system, database, message broker, storage, etc</strong>.
+In the majority of cases, medium tests rely on an external process running on the same host/VM/container.
+A good example of an external process is a docker service running on the same host/VM with a test-runner process, which can be utilized by <a href="https://www.testcontainers.org/">testcontainers</a> framework.</p>
 </div>
 <div class="paragraph">
 <p><em>Medium Tests must be separated from Small Tests in a project structure.
@@ -1517,16 +1517,16 @@ They are to be running during <strong>integration-test</strong> build phase in <
 Test Coverage tools should have separate reports for Medium Tests.</em></p>
 </div>
 <div class="paragraph">
-<p><strong>It&#8217;s expected that medium tests shouldn&#8217;t run longer than 5-10 minutes. Majority of time is usually spent on a dependent processes start, but once they are running - tests should complete fast.</strong></p>
+<p><strong>It&#8217;s expected that medium tests shouldn&#8217;t run longer than 5-10 minutes. The majority of time is usually spent on a dependent process start, but once they are running - tests should complete fast.</strong></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="large-test"><a class="anchor" href="#large-test"></a>Large Tests</h4>
 <div class="paragraph">
-<p><strong>Large tests</strong> are running over component(s) deployed to environment by the same <strong>Continuous Deployment</strong> pipeline that deploys to production.</p>
+<p><strong>Large tests</strong> are running over component(s) deployed to the environment by the same <strong>Continuous Deployment</strong> pipeline that deploys to production.</p>
 </div>
 <div class="paragraph">
-<p><strong>Large Tests</strong> can be reflected by following test suites:</p>
+<p><strong>Large Tests</strong> can be reflected by the following test suites:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1570,7 +1570,7 @@ If their run takes too long&#8201;&#8212;&#8201;it&#8217;s expected to have sepa
 </li>
 <li>
 <p>NFRs gate in <strong>Continuous Deployment</strong> pipeline. It&#8217;s expected that desired/existed application benchmarks have
-been already collected by performance tests and put as a NFR&#8217;s thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.</p>
+been already collected by performance tests and put as an NFR&#8217;s thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.</p>
 </li>
 </ul>
 </div>
@@ -1590,10 +1590,10 @@ been already collected by performance tests and put as a NFR&#8217;s thresholds/
 <p><strong>MAJOR</strong> - version when you make incompatible API changes,</p>
 </li>
 <li>
-<p><strong>MINOR</strong> - version when you add functionality in a backwards compatible manner, and</p>
+<p><strong>MINOR</strong> - version when you add functionality in a backward compatible manner, and</p>
 </li>
 <li>
-<p><strong>PATCH</strong> - version when you make backwards compatible bug fixes.</p>
+<p><strong>PATCH</strong> - version when you make backward compatible bug fixes.</p>
 </li>
 </ul>
 </div>

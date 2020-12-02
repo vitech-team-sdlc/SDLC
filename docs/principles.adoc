@@ -16,7 +16,7 @@ Typically we use  **Scaled Trunk-Based Development**
 ==== Best Practices
 * Only fast forward merges to the trunk.
 * Disallow pushing to the trunk.
-* Machine readable meaning to commit messages.
+* Machine-readable meaning to commit messages.
 * _Merge squash your multiple changes in your short life branches._
 * _Rebasing master against your short-lived branch to keep it up to date is best, do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history._
 *  Feature branches must be short-lived.
@@ -30,9 +30,9 @@ NOTE: More info you can get https://trunkbaseddevelopment.com/[here] and https:/
 
 === Quality Gateway
 The **Quality Gateway** is an organizational\infrastructure point through which all product code must pass.
-The intention of having gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
+The intention of having a gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
 thereby preventing incorrect code from passing from the local codebase to a shared codebase.
-To get through the quality gateway code must satisfy a number of <<tests>>.
+To get through the quality gateway code must satisfy several <<tests>>.
 The tests are devised to make sure that the requirement is an accurate statement of the business needs.
 
 ==== Quality Gates
@@ -83,7 +83,7 @@ The question a small test attempts to answer is, **"Does this code do what it is
 
 _Small Tests are to be running during **test** build phase in **Continuous Integration** pipeline._
 
-IMPORTANT: Test that doesn't require dependency on external resources (file system, database, network, wiremocks, another OS process) is a small one.
+IMPORTANT: A test that doesn't require dependency on external resources (file system, database, network, http://wiremock.org[wiremocks], another OS process) is a small one.
 
 [[medium-test]]
 ==== Medium Tests
@@ -99,22 +99,22 @@ Later in the development cycle, <<roles-tes, TEs>> can execute medium tests eith
 
 The question a medium test answer is, **"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"**.
 
-For a specific function under test, neighbor function could be : **another component, module, network interface, file system, database, message broker, storage, etc**.
-In majority of cases medium tests rely on external process running on the same host/VM/container.
-Good example of external process is docker service running on the same host/VM with test-runner process, what can be utilized by https://www.testcontainers.org/[testcontainers] framework.
+For a specific function under test, the neighbor function could be: **another component, module, network interface, file system, database, message broker, storage, etc**.
+In the majority of cases, medium tests rely on an external process running on the same host/VM/container.
+A good example of an external process is a docker service running on the same host/VM with a test-runner process, which can be utilized by https://www.testcontainers.org/[testcontainers] framework.
 
 _Medium Tests must be separated from Small Tests in a project structure.
 They are to be running during **integration-test** build phase in **Continuous Integration** pipeline.
 Test Coverage tools should have separate reports for Medium Tests._
 
-**It's expected that medium tests shouldn't run longer than 5-10 minutes. Majority of time is usually spent on a dependent processes start, but once they are running - tests should complete fast.**
+**It's expected that medium tests shouldn't run longer than 5-10 minutes. The majority of time is usually spent on a dependent process start, but once they are running - tests should complete fast.**
 
 [[large-test]]
 ==== Large Tests
 
-**Large tests** are running over component(s) deployed to environment by the same **Continuous Deployment** pipeline that deploys to production.
+**Large tests** are running over component(s) deployed to the environment by the same **Continuous Deployment** pipeline that deploys to production.
 
-**Large Tests** can be reflected by following test suites:
+**Large Tests** can be reflected by the following test suites:
 
 * End-To-End
 * Functional
@@ -133,7 +133,7 @@ Possible phases/places where **Large Tests** can be running :
 * Functional Test Suite in **Continuous Deployment** pipeline (after-deployment step).
 If their run takes too long -- it's expected to have separate **Smoke/Sanity test suite** extracted for that purpose and Functional ones running by separate pipeline.
 * NFRs gate in **Continuous Deployment** pipeline. It's expected that desired/existed application benchmarks have
-been already collected by performance tests and put as a NFR's thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.
+been already collected by performance tests and put as an NFR's thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.
 
 === Versions
 https://semver.org[Semantic Versioning]
@@ -141,8 +141,8 @@ https://semver.org[Semantic Versioning]
 Given a version number `MAJOR.MINOR.PATCH`, increment the:
 
 * *MAJOR* - version when you make incompatible API changes,
-* *MINOR* - version when you add functionality in a backwards compatible manner, and
-* *PATCH* - version when you make backwards compatible bug fixes.
+* *MINOR* - version when you add functionality in a backward compatible manner, and
+* *PATCH* - version when you make backward compatible bug fixes.
 
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
