@@ -1208,8 +1208,22 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 </div>
 <div class="sect3">
 <h4 id="_keycloak"><a class="anchor" href="#_keycloak"></a>Keycloak</h4>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
 <p>For Keycloak configuration use: <code>charts/dev/keycloak/values.yaml.gotmpl</code> file in env. repository list of keycloak configs: <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration" class="bare">https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration</a></p>
+</li>
+<li>
+<p>For default realm configuration in <a href="#runbook-vault">Vault</a> find <code>keycloak-relams/efault-relam.json</code> key and edit existed json.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>if you need add more realms, add new realm secret into <code>charts/dev/keycloak/templates</code> and configure in <code>charts/dev/keycloak/values.yaml</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">

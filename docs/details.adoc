@@ -43,7 +43,9 @@ NOTE: You can use  next variables what can be populated/replaced: `${ENV}`, `${S
 
 ==== Keycloak
 
-For Keycloak configuration use: `charts/dev/keycloak/values.yaml.gotmpl` file in env. repository list of keycloak configs: https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration
+* For Keycloak configuration use: `charts/dev/keycloak/values.yaml.gotmpl` file in env. repository list of keycloak configs: https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration
+* For default realm configuration in <<runbook-vault>> find `keycloak-relams/efault-relam.json` key and edit existed json.
+** if you need add more realms, add new realm secret into `charts/dev/keycloak/templates` and configure in `charts/dev/keycloak/values.yaml`
 
 ==== Metrics
 Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-stack]
@@ -55,7 +57,7 @@ Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/char
 
 ==== Alertmanager
 ===== Configure Slack Notifications
-* In vault find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+* In <<runbook-vault>> find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
 
 ==== Runbook
 
