@@ -59,7 +59,7 @@ include::{scriptsdir}/sec-auto-populate.sh[]
 [source,bash]
 .sec-required-populate.sh
 ----
-include::scripts/sec-required-populate.sh[]
+include::{scriptsdir}/sec-required-populate.sh[]
 ----
 
 NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>

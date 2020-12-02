@@ -1019,7 +1019,11 @@ jx namespace jx
 <div class="listingblock">
 <div class="title">sec-required-populate.sh</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">Unresolved directive <span class="k">in </span>docs/setup.adoc - include::scripts/sec-required-populate.sh[]</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">jx secret edit <span class="nt">-f</span> slack
+
+jx secret edit <span class="nt">-f</span> snyk
+
+jx secret edit <span class="nt">-f</span> sonar</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1259,7 +1263,7 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="ulist">
 <ul>
 <li>
-<p>In vault find <code>alertmanager.yaml</code> secret and replace <code>${SLACK_HOOK_URL}</code> with your hook URL. See example: <code>charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml</code></p>
+<p>In <a href="#runbook-vault">Vault</a> find <code>alertmanager.yaml</code> secret and replace <code>${SLACK_HOOK_URL}</code> with your hook URL. See example: <code>charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml</code></p>
 </li>
 </ul>
 </div>
