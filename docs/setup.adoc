@@ -6,13 +6,17 @@
 === Prerequisites
 * https://github.com/join[Create a git bot user] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
 * https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI]
-* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI] (version `== 13.5`)
 * https://googlecontainertools.github.io/kpt/[Kpt]
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
 ** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Enable workload identity for k8s cluster]
+** login `gcloud auth application-default login`
+** make sure user have *full access* to GCP resources
 * generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
 * generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks]
 * generate Snyk https://snyk.io/blog/service-accounts/[token]
+
+WARNING: logged user into GCP should have full access to cluster resources including IAM roles creation
 
 === Setup
 ==== 1. Create Infrastructure Repository

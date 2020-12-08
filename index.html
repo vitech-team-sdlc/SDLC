@@ -692,6 +692,7 @@ pre.rouge {
 <li><a href="#_github-project">GitHub project</a></li>
 <li><a href="#_diagrams">Diagrams</a></li>
 <li><a href="#_example-apps">Example Apps</a></li>
+<li><a href="#_local-git-credentials">Local Git credentials</a></li>
 </ul>
 </li>
 </ul>
@@ -835,7 +836,7 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a></p>
 </li>
 <li>
-<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a></p>
+<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a> (version <code>== 13.5</code>)</p>
 </li>
 <li>
 <p><a href="https://googlecontainertools.github.io/kpt/">Kpt</a></p>
@@ -846,6 +847,12 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <ul>
 <li>
 <p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Enable workload identity for k8s cluster</a></p>
+</li>
+<li>
+<p>login <code>gcloud auth application-default login</code></p>
+</li>
+<li>
+<p>make sure user have <strong>full access</strong> to GCP resources</p>
 </li>
 </ul>
 </div>
@@ -860,6 +867,18 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <p>generate Snyk <a href="https://snyk.io/blog/service-accounts/">token</a></p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+logged user into GCP should have full access to cluster resources including IAM roles creation
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1666,6 +1685,12 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a></p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_local-git-credentials"><a class="anchor" href="#_local-git-credentials"></a>Local Git credentials</h3>
+<div class="paragraph">
+<p>if you need change <strong>local</strong> git user and token do it in the file: <code>~/git/credentials</code></p>
 </div>
 </div>
 </div>

@@ -13,3 +13,6 @@ https://github.com/vitech-team/SDLC/projects
 * https://github.com/vitech-team/mood-feed-frontend[Frontend app example]
 * https://github.com/vitech-team/mood-feed-backend[Backend example]
 * https://github.com/vitech-team/mood-feed-test[Large test example]
+
+=== Local Git credentials
+if you need change *local* git user and token do it in the file: `~/git/credentials`
