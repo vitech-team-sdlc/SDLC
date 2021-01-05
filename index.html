@@ -689,10 +689,14 @@ pre.rouge {
 </li>
 <li><a href="#_other">Other</a>
 <ul class="sectlevel2">
+<li><a href="#_connect-to-existing-cluster-jx">Connect to existing cluster / JX</a></li>
+<li><a href="#_jx">JX</a></li>
+<li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_github-project">GitHub project</a></li>
 <li><a href="#_diagrams">Diagrams</a></li>
 <li><a href="#_example-apps">Example Apps</a></li>
 <li><a href="#_local-git-credentials">Local Git credentials</a></li>
+<li><a href="#_some-tools">Some tools</a></li>
 </ul>
 </li>
 </ul>
@@ -794,6 +798,34 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <div class="sect2">
 <h3 id="_cicd-flow"><a class="anchor" href="#_cicd-flow"></a>CI/CD flow</h3>
 <iframe allowfullscreen frameborder="0" style="width: 100%; height: 750px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
+<div class="sect3">
+<h4 id="_pull-request-flow"><a class="anchor" href="#_pull-request-flow"></a>Pull Request flow</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a> scan - <a href="https://github.com/aevea/commitsar">Commitsar</a></p>
+</li>
+<li>
+<p>gradle build - including <a href="#small-test">Small Tests</a> &amp; <a href="#medium-test">Medium Tests</a></p>
+</li>
+<li>
+<p>scan for secrets - <a href="https://github.com/zricethezav/gitleaks">Gitleaks</a></p>
+</li>
+<li>
+<p>container build - using <a href="https://paketo.io">Paketo Buildpacks</a></p>
+</li>
+<li>
+<p>container scan - <a href="https://github.com/aquasecurity/trivy">Trivy</a> &amp; <a href="https://github.com/goodwithtech/dockle">Dockle</a></p>
+</li>
+<li>
+<p>static code analyse - <a href="https://www.sonarqube.org">sonar</a></p>
+</li>
+<li>
+<p>preview environment - JX</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_stack"><a class="anchor" href="#_stack"></a>Stack</h3>
@@ -1081,7 +1113,7 @@ jx project quickstart <span class="nt">--pack</span><span class="o">=</span><spa
 </div>
 </div>
 <div class="sect4">
-<h5 id="_5-2-angular"><a class="anchor" href="#_5-2-angular"></a>5.2 Angular ?</h5>
+<h5 id="_5-2-angular-react"><a class="anchor" href="#_5-2-angular-react"></a>5.2 Angular / React ?</h5>
 <div class="paragraph">
 <p>If you need frontend application on Angular use: <code>vitech-sdlc-frontend</code></p>
 </div>
@@ -1104,6 +1136,28 @@ jx project quickstart <span class="nt">--pack</span><span class="o">=</span><spa
 <p>change backend service name in <code>nginx.conf</code></p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setup-nexus-npm-proxy"><a class="anchor" href="#_setup-nexus-npm-proxy"></a>Setup nexus npm proxy</h4>
+<div class="paragraph">
+<p>How to setup  Nexus proxy for NPM.
+also see: <a href="https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages" class="bare">https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">NPM_CONF</span><span class="o">=</span><span class="s2">"~/.npmrc"</span>
+<span class="nv">USER</span><span class="o">=</span><span class="s2">"admin"</span>
+<span class="c"># possible to pull pass from k8s secret.</span>
+<span class="c"># secret: nexus</span>
+<span class="nv">PASSWORD</span><span class="o">=</span><span class="s2">"admin123"</span>
+
+<span class="nv">JSON_PATH</span><span class="o">=</span><span class="s2">"{.spec.rules[*].host}"</span>
+<span class="nv">NEXUS_URL</span><span class="o">=</span><span class="si">$(</span>kubectl get ingress <span class="nt">-n</span> jx nexus <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">"</span><span class="nv">$JSON_PATH</span><span class="s2">"</span><span class="si">)</span>
+<span class="nv">ENC_PASS</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"</span><span class="k">${</span><span class="nv">USER</span><span class="k">}</span><span class="s2">:</span><span class="k">${</span><span class="nv">PASSWORD</span><span class="k">}</span><span class="s2">"</span> | <span class="nb">base64</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"registry=</span><span class="k">${</span><span class="nv">NEXUS_URL</span><span class="k">}</span><span class="s2">"</span> <span class="o">&gt;&gt;</span> <span class="s2">"</span><span class="nv">$NPM_CONF</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"_auth=</span><span class="k">${</span><span class="nv">ENC_PASS</span><span class="k">}</span><span class="s2">"</span> <span class="o">&gt;&gt;</span> <span class="s2">"</span><span class="nv">$NPM_CONF</span><span class="s2">"</span></code></pre>
 </div>
 </div>
 </div>
@@ -1653,6 +1707,94 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <h2 id="_other"><a class="anchor" href="#_other"></a>Other</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_connect-to-existing-cluster-jx"><a class="anchor" href="#_connect-to-existing-cluster-jx"></a>Connect to existing cluster / JX</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>download <a href="https://github.com/jenkins-x/jx-cli/releases">JX CLI/client</a> which is defined by env repository</p>
+</li>
+<li>
+<p><a href="https://cloud.google.com/sdk/gcloud/reference/auth/login">login</a> into GC cloud</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>gcloud auth login
+gcloud auth application-default login</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>connect to cluster</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nv">CLUSTER_NAME</span><span class="o">=</span><span class="s2">"DUMMY"</span>
+<span class="nv">ZONE</span><span class="o">=</span><span class="s2">"DUMMY"</span>
+<span class="nv">GCP_PROJECT</span><span class="o">=</span><span class="s2">"DUMMY"</span>
+gcloud container clusters get-credentials <span class="s2">"</span><span class="k">${</span><span class="nv">CLUSTER_NAME</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--zone</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ZONE</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--project</span> <span class="s2">"</span><span class="k">${</span><span class="nv">GCP_PROJECT</span><span class="k">}</span><span class="s2">"</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>switch to <code>jx</code> namespace</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">jx nx jx</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jx"><a class="anchor" href="#_jx"></a>JX</h3>
+<div class="sect3">
+<h4 id="_where-git-creds-stored"><a class="anchor" href="#_where-git-creds-stored"></a>Where git creds stored</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">~/git/credentials</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gradle"><a class="anchor" href="#_gradle"></a>Gradle</h3>
+<div class="paragraph">
+<p>To use artifacts mirror locally next properties into <code>.gradle.properties</code> or into global gradle properties <code>~/.gradle/.gradle.properties</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>artifacts.url</code></p>
+</li>
+<li>
+<p><code>artifacts.user</code></p>
+</li>
+<li>
+<p><code>artifacts.password</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+current properties applicable for projects which is generated by SDLC quickstart.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_github-project"><a class="anchor" href="#_github-project"></a>GitHub project</h3>
 <div class="paragraph">
 <p><a href="https://github.com/vitech-team/SDLC/projects" class="bare">https://github.com/vitech-team/SDLC/projects</a></p>
@@ -1676,10 +1818,23 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/vitech-team/mood-feed-frontend">Frontend app example</a></p>
+<p><a href="https://github.com/vitech-team/mood-feed-frontend">Angular Frontend app example</a></p>
+</li>
+<li>
+<p><a href="https://github.com/vitech-team/sdlc-react">React Frontend app example</a></p>
 </li>
 <li>
 <p><a href="https://github.com/vitech-team/mood-feed-backend">Backend example</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>MySQL</p>
+</li>
+<li>
+<p>Spring Boot</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a></p>
@@ -1693,13 +1848,23 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <p>if you need change <strong>local</strong> git user and token do it in the file: <code>~/git/credentials</code></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_some-tools"><a class="anchor" href="#_some-tools"></a>Some tools</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://k8slens.dev/" class="bare">https://k8slens.dev/</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1.0<br>
-Last updated 2020-12-01 17:48:10 +0200
+Last updated 2020-12-28 15:07:10 +0200
 </div>
 </div>
 </body>

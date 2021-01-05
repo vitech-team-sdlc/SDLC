@@ -82,7 +82,7 @@ If you need some REST API backend service use template with name: `vitech-sdlc-b
 include::{scriptsdir}/quick-start-backend.sh[]
 ----
 
-===== 5.2 Angular ?
+===== 5.2 Angular / React ?
 If you need frontend application on Angular use: `vitech-sdlc-frontend`
 
 [source,shell]
@@ -95,3 +95,22 @@ After setup you need edit default configs in `environments` folder.
 
 * keycloak url: `kubectrl get ingress -n keycloak`
 * change backend service name in `nginx.conf`
+
+==== Setup nexus npm proxy
+How to setup  Nexus proxy for NPM.
+also see: https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages
+
+```shell
+NPM_CONF="~/.npmrc"
+USER="admin"
+# possible to pull pass from k8s secret.
+# secret: nexus
+PASSWORD="admin123"
+
+JSON_PATH="{.spec.rules[*].host}"
+NEXUS_URL=$(kubectl get ingress -n jx nexus -o jsonpath="$JSON_PATH")
+ENC_PASS="$(echo -n "${USER}:${PASSWORD}" | base64)"
+echo "registry=${NEXUS_URL}" >> "$NPM_CONF"
+echo "_auth=${ENC_PASS}" >> "$NPM_CONF"
+```
+

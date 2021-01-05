@@ -36,6 +36,15 @@ NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Conti
 <iframe allowfullscreen frameborder="0" style="width: 100%; height: 750px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
 ++++
 
+==== Pull Request flow
+* https://www.conventionalcommits.org/en/v1.0.0/[conventional commits] scan - https://github.com/aevea/commitsar[Commitsar]
+* gradle build - including <<#small-test>> & <<#medium-test>>
+* scan for secrets - https://github.com/zricethezav/gitleaks[Gitleaks]
+* container build - using https://paketo.io[Paketo Buildpacks]
+* container scan - https://github.com/aquasecurity/trivy[Trivy] & https://github.com/goodwithtech/dockle[Dockle]
+* static code analyse - https://www.sonarqube.org[sonar]
+* preview environment - JX
+
 === Stack
 * https://jenkins-x.io[Jenkins X] - CORE
 * https://tekton.dev[Tekton] - CI/CD
