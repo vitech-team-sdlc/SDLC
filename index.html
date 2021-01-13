@@ -976,6 +976,7 @@ terraform init
 terraform apply
 
 <span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">Setup kubeconfig...</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
+gcloud components update
 gcloud container clusters get-credentials <span class="s2">"</span><span class="k">${</span><span class="nv">CLUSTER_NAME</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--zone</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ZONE</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--project</span> <span class="s2">"</span><span class="k">${</span><span class="nv">GCP_PROJECT</span><span class="k">}</span><span class="s2">"</span>
 
 <span class="nb">echo</span> <span class="s2">"Taling logs..."</span>
@@ -992,9 +993,23 @@ kubectl create secret docker-registry <span class="nv">$SECRETNAME</span> <span 
   <span class="nt">--namespace</span><span class="o">=</span>jx
 kubectl label secret <span class="nv">$SECRETNAME</span> secret.jenkins-x.io/replica-source<span class="o">=</span><span class="nb">true</span> <span class="nt">--namespace</span><span class="o">=</span>jx
 
-jx namespace jx
+<span class="nb">cd</span> <span class="s2">"../</span><span class="nv">$ENV_REPO_NAME</span><span class="s2">"</span> <span class="o">||</span> <span class="nb">exit
+</span>git pull
 
-<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"For vault root token use: </span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span></code></pre>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">Okay, now we need populate secrets which is related on other services...</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">Creating proxy to vault...</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
+jx secret vault portforward &amp;
+<span class="nb">sleep </span>3
+jx secret verify
+jx sercret populate
+jx secret edit <span class="nt">-f</span> sonar
+
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">Killing proxy process...</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
+<span class="nb">kill</span> %1
+
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"For destroy open infrastructure folder and execute: </span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">terraform destroy"</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"
+
+echo -e "</span>For vault root token use: <span class="k">${</span><span class="nv">green</span><span class="k">}</span>kubectl get secrets vault-unseal-keys  <span class="nt">-n</span> secret-infra <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">={</span>.data.vault-root<span class="o">}</span> | <span class="nb">base64</span> <span class="nt">--decode</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
