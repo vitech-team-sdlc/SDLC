@@ -67,7 +67,7 @@ echo -e "${green}Creating proxy to vault...${nrm}"
 jx secret vault portforward &
 sleep 3
 jx secret verify
-jx sercret populate
+jx secret populate
 jx secret edit -f sonar
 
 echo -e "${green}Killing proxy process...${nrm}"
