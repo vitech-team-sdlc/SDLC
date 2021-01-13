@@ -42,6 +42,7 @@ terraform init
 terraform apply
 
 echo -e "${green}Setup kubeconfig...${nrm}"
+gcloud components update
 gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${ZONE}" --project "${GCP_PROJECT}"
 
 echo "Taling logs..."
@@ -58,6 +59,20 @@ kubectl create secret docker-registry $SECRETNAME \
   --namespace=jx
 kubectl label secret $SECRETNAME secret.jenkins-x.io/replica-source=true --namespace=jx
 
-jx namespace jx
+cd "../$ENV_REPO_NAME" || exit
+git pull
+
+echo -e "${green}Okay, now we need populate secrets which is related on other services...${nrm}"
+echo -e "${green}Creating proxy to vault...${nrm}"
+jx secret vault portforward &
+sleep 3
+jx secret verify
+jx sercret populate
+jx secret edit -f sonar
+
+echo -e "${green}Killing proxy process...${nrm}"
+kill %1
+
+echo -e "For destroy open infrastructure folder and execute: ${green}terraform destroy"${nrm}"
 
 echo -e "For vault root token use: ${green}kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode${nrm}"
