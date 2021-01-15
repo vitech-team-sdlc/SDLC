@@ -3,8 +3,9 @@
 export INFRA_REPO_NAME="demo-infra" # <1>
 export ENV_REPO_NAME="demo-environment" # <2>
 
-export INFRA_GIT="https://github.com/vitech-team/$INFRA_REPO_NAME.git" # <3>
-export ENV_GIT="https://github.com/vitech-team/$ENV_REPO_NAME.git" # <3>
+export BASE_REPO_URL="https://github.com/vitech-team"
+export INFRA_GIT="$BASE_REPO_URL/$INFRA_REPO_NAME.git" # <3>
+export ENV_GIT="$BASE_REPO_URL/$ENV_REPO_NAME.git" # <3>
 
 export TF_VAR_jx_bot_username=XXX # <4>
 export TF_VAR_jx_bot_token=XXX # <4>
@@ -73,6 +74,6 @@ jx secret edit -f sonar
 echo -e "${green}Killing proxy process...${nrm}"
 kill %1
 
-echo -e "For destroy open infrastructure folder and execute: ${green}terraform destroy"${nrm}"
+echo -e "For destroy open infrastructure folder and execute: ${green}terraform destroy${nrm}"
 
 echo -e "For vault root token use: ${green}kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode${nrm}"

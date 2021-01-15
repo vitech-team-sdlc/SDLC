@@ -4,12 +4,12 @@
 
 [[setup]]
 === Prerequisites
-* https://github.com/join[Create a git bot user] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
-* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI]
-* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI] (version `== 13.5`)
+* https://github.com/join[Create a git user for a bot] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
+* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI] (version `== 13.5`)
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
 * https://googlecontainertools.github.io/kpt/[Kpt]
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
-** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Enable workload identity for k8s cluster]
+** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API.] (Implement only the first item of the provided guide)
 ** login `gcloud auth application-default login`
 ** make sure user have *full access* to GCP resources
 * generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
@@ -23,7 +23,7 @@ WARNING: logged user into GCP should have full access to cluster resources inclu
 Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
 
 ==== 2. Create Environment Repository
-Create environment repository: https://github.com/vitech-team/jx3-gke-vault
+Create environment repository: https://github.com/vitech-team/jx3-gke-vault/generate
 
 ==== 3. Prepare install script
 
@@ -35,7 +35,7 @@ include::{scriptsdir}/install.sh[]
 <1> infrastructure repository name
 <2> environment repository name
 <3> infra. and env. repo URLs
-<4> GitHub user name and token. *User should habe settings permission to all repositories*
+<4> GitHub username and token. *User should have settings permission to all repositories*
 <5> cluster name
 <6> GCP project id
 <7> cluster zone: https://cloud.google.com/compute/docs/regions-zones#available
