@@ -22,6 +22,8 @@ WARNING: logged user into GCP should have full access to cluster resources inclu
 ==== 1. Create Infrastructure Repository
 Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
 
+NOTE: Do not clone the created repository to your local machine, it will be done automatically by the <<3. Prepare install script, install script>>.
+
 ==== 2. Create Environment Repository
 Create environment repository: https://github.com/vitech-team/jx3-gke-vault/generate
 
@@ -42,6 +44,8 @@ include::{scriptsdir}/install.sh[]
 <8> default node count
 <9> if buckets and PVCs should be deleted in case of `terraform destroy` command
 <10> store cluster configs in file. for more configs see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs
+
+Put the script into the folder, where you want to clone your repositories and execute it.
 
 ==== 4. Populate secrets
 ===== 4.1 Create vault proxy
