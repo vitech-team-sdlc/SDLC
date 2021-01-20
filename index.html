@@ -862,23 +862,20 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/join">Create a git bot user</a> (different from your own personal user) and generate a <a href="https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook">personal access token</a>, this will be used by Jenkins X to interact with git repositories.</p>
+<p><a href="https://github.com/join">Create a git user for a bot</a> (different from your own personal user) and generate a <a href="https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook">personal access token</a>, this will be used by Jenkins X to interact with git repositories.</p>
 </li>
 <li>
-<p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a></p>
+<p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a> (version <code>== 13.5</code>)</p>
 </li>
 <li>
-<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a> (version <code>== 13.5</code>)</p>
-</li>
-<li>
-<p><a href="https://googlecontainertools.github.io/kpt/">Kpt</a></p>
+<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a></p>
 </li>
 <li>
 <p><a href="https://cloud.google.com/sdk/docs/quickstart#linux">Google Cloud SDK</a></p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Enable workload identity for k8s cluster</a></p>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Ensure that you have enabled the IAM Service Account Credentials API.</a> (Implement only the first item of the provided guide)</p>
 </li>
 <li>
 <p>login <code>gcloud auth application-default login</code></p>
@@ -893,10 +890,10 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <p>generate Sonar cloud <a href="https://docs.sonarqube.org/latest/user-guide/user-token/">token</a></p>
 </li>
 <li>
-<p>generate Slack <a href="https://api.slack.com/messaging/webhooks#getting_started">Incoming Webhooks</a></p>
+<p>generate Slack <a href="https://api.slack.com/messaging/webhooks#getting_started">Incoming Webhooks</a> <code>optional</code></p>
 </li>
 <li>
-<p>generate Snyk <a href="https://snyk.io/blog/service-accounts/">token</a></p>
+<p>generate Snyk <a href="https://snyk.io/blog/service-accounts/">token</a>  <code>if you have license</code> <code>optional</code></p>
 </li>
 </ul>
 </div>
@@ -920,11 +917,23 @@ logged user into GCP should have full access to cluster resources including IAM 
 <div class="paragraph">
 <p>Create infrastructure repository for GKE: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate</a></p>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do not clone the created repository to your local machine, it will be done automatically by the <a href="#_3-prepare-install-script">install script</a>.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_2-create-environment-repository"><a class="anchor" href="#_2-create-environment-repository"></a>2. Create Environment Repository</h4>
 <div class="paragraph">
-<p>Create environment repository: <a href="https://github.com/vitech-team/jx3-gke-vault" class="bare">https://github.com/vitech-team/jx3-gke-vault</a></p>
+<p>Create environment repository: <a href="https://github.com/vitech-team/jx3-gke-vault/generate" class="bare">https://github.com/vitech-team/jx3-gke-vault/generate</a></p>
 </div>
 </div>
 <div class="sect3">
@@ -937,8 +946,9 @@ logged user into GCP should have full access to cluster resources including IAM 
 <span class="nb">export </span><span class="nv">INFRA_REPO_NAME</span><span class="o">=</span><span class="s2">"demo-infra"</span> <i class="conum" data-value="1"></i><b>(1)</b>
 <span class="nb">export </span><span class="nv">ENV_REPO_NAME</span><span class="o">=</span><span class="s2">"demo-environment"</span> <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="nb">export </span><span class="nv">INFRA_GIT</span><span class="o">=</span><span class="s2">"https://github.com/vitech-team/</span><span class="nv">$INFRA_REPO_NAME</span><span class="s2">.git"</span> <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="nb">export </span><span class="nv">ENV_GIT</span><span class="o">=</span><span class="s2">"https://github.com/vitech-team/</span><span class="nv">$ENV_REPO_NAME</span><span class="s2">.git"</span> <i class="conum" data-value="3"></i><b>(3)</b>
+<span class="nb">export </span><span class="nv">BASE_REPO_URL</span><span class="o">=</span><span class="s2">"https://github.com/vitech-team"</span>
+<span class="nb">export </span><span class="nv">INFRA_GIT</span><span class="o">=</span><span class="s2">"</span><span class="nv">$BASE_REPO_URL</span><span class="s2">/</span><span class="nv">$INFRA_REPO_NAME</span><span class="s2">.git"</span> <i class="conum" data-value="3"></i><b>(3)</b>
+<span class="nb">export </span><span class="nv">ENV_GIT</span><span class="o">=</span><span class="s2">"</span><span class="nv">$BASE_REPO_URL</span><span class="s2">/</span><span class="nv">$ENV_REPO_NAME</span><span class="s2">.git"</span> <i class="conum" data-value="3"></i><b>(3)</b>
 
 <span class="nb">export </span><span class="nv">TF_VAR_jx_bot_username</span><span class="o">=</span>XXX <i class="conum" data-value="4"></i><b>(4)</b>
 <span class="nb">export </span><span class="nv">TF_VAR_jx_bot_token</span><span class="o">=</span>XXX <i class="conum" data-value="4"></i><b>(4)</b>
@@ -1007,9 +1017,9 @@ jx secret edit <span class="nt">-f</span> sonar
 <span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">Killing proxy process...</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
 <span class="nb">kill</span> %1
 
-<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"For destroy open infrastructure folder and execute: </span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">terraform destroy"</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"For destroy open infrastructure folder and execute: </span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">terraform destroy</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span>
 
-echo -e "</span>For vault root token use: <span class="k">${</span><span class="nv">green</span><span class="k">}</span>kubectl get secrets vault-unseal-keys  <span class="nt">-n</span> secret-infra <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">={</span>.data.vault-root<span class="o">}</span> | <span class="nb">base64</span> <span class="nt">--decode</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span></code></pre>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"For vault root token use: </span><span class="k">${</span><span class="nv">green</span><span class="k">}</span><span class="s2">kubectl get secrets vault-unseal-keys  -n secret-infra -o jsonpath={.data.vault-root} | base64 --decode</span><span class="k">${</span><span class="nv">nrm</span><span class="k">}</span><span class="s2">"</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1028,7 +1038,7 @@ echo -e "</span>For vault root token use: <span class="k">${</span><span class="
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>GitHub user name and token. <strong>User should habe settings permission to all repositories</strong></td>
+<td>GitHub username and token. <strong>User should have settings permission to all repositories</strong></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
@@ -1055,6 +1065,9 @@ echo -e "</span>For vault root token use: <span class="k">${</span><span class="
 <td>store cluster configs in file. for more configs see: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs</a></td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p><strong>Put the script into the folder, where you want to clone your repositories and execute it.</strong></p>
 </div>
 </div>
 <div class="sect3">
@@ -1122,8 +1135,7 @@ Secrets also can be populated via Vault UI see: <a href="#runbook-vault">Vault</
 <div class="listingblock">
 <div class="title">quick-start-backend.sh</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nv">YOUR_ORG_NAME</span><span class="o">=</span><span class="s2">"vitech-team"</span>
-jx project quickstart <span class="nt">--pack</span><span class="o">=</span><span class="s2">"spring-gradle"</span> <span class="nt">--org</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">YOUR_ORG_NAME</span><span class="k">}</span><span class="s2">"</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">jx project quickstart <span class="nt">--pack</span><span class="o">=</span><span class="s2">"spring-gradle"</span></code></pre>
 </div>
 </div>
 </div>
@@ -1135,8 +1147,7 @@ jx project quickstart <span class="nt">--pack</span><span class="o">=</span><spa
 <div class="listingblock">
 <div class="title">quickstart-forntend.sh</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nv">YOUR_ORG_NAME</span><span class="o">=</span><span class="s2">"vitech-team"</span>
-jx project quickstart <span class="nt">--pack</span><span class="o">=</span><span class="s2">"angular"</span> <span class="nt">--org</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">YOUR_ORG_NAME</span><span class="k">}</span><span class="s2">"</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">jx project quickstart <span class="nt">--pack</span><span class="o">=</span><span class="s2">"angular"</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
