@@ -1,24 +1,24 @@
 === Customization
 ==== Pipelines
 ===== Pipelines catalog and pack
-All shared tasks and packs stored in: https://github.com/vitech-team/tekton-pipelines-catalog
+All shared tasks and packs are stored in: https://github.com/vitech-team/tekton-pipelines-catalog
 
 ===== Packs
 Custom packs: https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs
 
 All tasks, packs and pipelines are in sync with https://github.com/vitech-team/jx3-gke-vault[environment repository] via https://googlecontainertools.github.io/kpt/[Kpt].
 
-NOTE: more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
+NOTE: for more information about tasks and pipelines check https://github.com/tektoncd/pipeline[Tekton docs]
 
-NOTE: more information about pipelines on JX see https://jenkins-x.io/docs/v3/develop/pipeline-catalog/[JX Pipeline Docs]
+NOTE: for more information about pipelines on JX see https://jenkins-x.io/docs/v3/develop/pipeline-catalog/[JX Pipeline Docs]
 
 ==== Large Tests
 
-Currently, we have only Large Tests implementation based https://webdriver.io[WebdriverIO].
-We added a few steps to `release` and `pullrequest` pipelines:
+Currently, we have only Large Tests implementation based on https://webdriver.io[WebdriverIO].
+We have added a few steps to `release` and `pullrequest` pipelines:
 
-* Check if large test been executed on *Staging* before promote it on Production *environment*
-* Execute *Large Tests* after changes been applied on environment like Production.
+* Check if the large test has been executed on *Staging* before promote it on Production *environment*
+* Execute *Large Tests* after changes have been applied on environment like Production.
 
 ===== Enable
 
@@ -36,28 +36,28 @@ For selenium hub config use:
 List of all configs: https://github.com/helm/charts/tree/master/stable/selenium#configuration
 
 ===== Slack notification
-If you wanna change Large test execution message to slack, open and change: `charts/dev/secret/templates/slack-messages.yaml`
+If you want to change Large test execution message to slack, please open and change: `charts/dev/secret/templates/slack-messages.yaml`
 
-NOTE: You can use  next variables what can be populated/replaced: `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`
+NOTE: You can use next variables that can be populated/replaced: `${ENV}`, `${STATUS}`, `${REPORT_URL}`, `${DETAILS}` and `${GIT_SHA}`
 
 
 ==== Keycloak
 
 * For Keycloak configuration use: `charts/dev/keycloak/values.yaml.gotmpl` file in env. repository list of keycloak configs: https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration
 * For default realm configuration in <<runbook-vault>> find `keycloak-relams/efault-relam.json` key and edit existed json.
-** if you need add more realms, add new realm secret into `charts/dev/keycloak/templates` and configure in `charts/dev/keycloak/values.yaml`
+** if you need to add more realms, add new realm secret into `charts/dev/keycloak/templates` and configure in `charts/dev/keycloak/values.yaml`
 
 ==== Metrics
 Metrics chart https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-stack]
 
-* For custom monitors and gradana dashboard use folder: `charts/dev/prometheusmonitors/templates`
+* For custom monitors and gradana dashboard use the folder: `charts/dev/prometheusmonitors/templates`
 * For metrics stack configuration use
 ** `charts/prometheus-community/kube-prometheus-stack/values.yaml.gotmpl`
 ** `charts/prometheus-community/kube-prometheus-stack/values.yaml`
 
 ==== Alertmanager
 ===== Configure Slack Notifications
-* In <<runbook-vault>> find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. See example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
+* In <<runbook-vault>> find `alertmanager.yaml` secret and replace `${SLACK_HOOK_URL}` with your hook URL. Example: `charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml`
 
 ==== Runbook
 
