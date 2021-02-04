@@ -20,14 +20,14 @@ jx nx jx
 ```
 
 === JX
-==== Where git creds stored
+==== Where git creds are stored
 
 ```shell
 ~/git/credentials
 ```
 
 === Gradle
-To use the artifacts mirror locally set up following properties into `.gradle.properties` or into global gradle properties `~/.gradle/.gradle.properties`:
+To use the artifacts mirror locally, set up following properties into `.gradle.properties` or into global gradle properties `~/.gradle/.gradle.properties`:
 
 * `artifacts.url`
 * `artifacts.user`
