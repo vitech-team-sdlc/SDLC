@@ -4,24 +4,24 @@
 
 [[setup]]
 === Prerequisites
-* https://github.com/join[Create a git user for a bot] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], this will be used by Jenkins X to interact with git repositories.
+* https://github.com/join[Create a git user for a bot] (different from your own personal user) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], which will be used by Jenkins X to interact with git repositories.
 * https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI] (version `== 13.5`)
 * https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
 ** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API.] (Implement only the first item of the provided guide)
 ** login `gcloud auth application-default login`
-** make sure user have *full access* to GCP resources
+** make sure, the user has *full access* to GCP resources
 * generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
 * generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks] `optional`
 * generate Snyk https://snyk.io/blog/service-accounts/[token]  `if you have license` `optional`
 
-WARNING: logged user into GCP should have full access to cluster resources including IAM roles creation
+WARNING: after a successful login into GCP the user should have full access to cluster resources including the ability to create IAM roles
 
 === Setup
 ==== 1. Create Infrastructure Repository
 Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
 
-WARNING: Do not clone the created repository to your local machine, it will be done automatically by the <<3. Prepare install script, install script>>.
+WARNING: Do not clone the created repository on your local machine, it will be done automatically by the <<3. Prepare install script, install script>>.
 
 ==== 2. Create Environment Repository
 Create environment repository: https://github.com/vitech-team/jx3-gke-vault/generate
@@ -44,11 +44,11 @@ include::{scriptsdir}/install.sh[]
 <9> if buckets and PVCs should be deleted in case of `terraform destroy` command
 <10> store cluster configs in file. for more configs see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs
 
-*Put the script into the folder, where you want to clone your repositories and execute it.*
+*Put the script into the folder, where you want to clone your repositories, and execute it.*
 
 ==== 4. Populate secrets
 ===== 4.1 Create vault proxy
-Fist we need start vault proxy
+First, we need to start the vault proxy
 [source,shell]
 .sec-vault-start.sh
 ----
@@ -72,12 +72,12 @@ include::{scriptsdir}/sec-required-populate.sh[]
 NOTE: Secrets also can be populated via Vault UI see: <<runbook-vault>>
 
 ===== 4.4 Verify secrets
-Execute `jx secret verify` and check if all needed secrets are populated like: `sonar`, `slack`, etc...
+Execute `jx secret verify` and check, if all needed secrets are populated like: `sonar`, `slack`, etc...
 
 
 ==== 5. Create application based on SDLC quickstart
 ===== 5.1 Spring ?
-If you need some REST API backend service use template with name: `vitech-sdlc-backend`
+If you need some REST API backend service, use a template with name: `vitech-sdlc-backend`
 
 [source,shell]
 .quick-start-backend.sh
@@ -86,7 +86,7 @@ include::{scriptsdir}/quick-start-backend.sh[]
 ----
 
 ===== 5.2 Angular / React ?
-If you need frontend application on Angular use: `vitech-sdlc-frontend`
+If you need a frontend application on Angular use: `vitech-sdlc-frontend`
 
 [source,shell]
 .quickstart-forntend.sh
@@ -94,13 +94,13 @@ If you need frontend application on Angular use: `vitech-sdlc-frontend`
 include::{scriptsdir}/quickstart-forntend.sh[]
 ----
 
-After setup you need edit default configs in `environments` folder.
+After setup, you need to edit default configs in the `environments` folder.
 
 * keycloak url: `kubectrl get ingress -n keycloak`
 * change backend service name in `nginx.conf`
 
 ==== Setup nexus npm proxy
-How to setup  Nexus proxy for NPM.
+How to setup Nexus proxy for NPM.
 also see: https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages
 
 ```shell
