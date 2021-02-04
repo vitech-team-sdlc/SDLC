@@ -1,5 +1,5 @@
 [[overview]]
-== Motivation
+== Motivation.
 * *High Performer*
 ** Deployment frequency - Releasing to production very frequently
 ** Lead time for changes - Low cycle time in ideas becoming production release code
