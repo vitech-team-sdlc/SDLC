@@ -1,5 +1,7 @@
+VITech Software Development Life Cycle Manual
+This document is created to represent our SDLC. Our development process is effective, modern, scalable, and lightweight. Our methods make us competitive compared with other top-performing companies, we can work fast without losing efficiency and deliver value to customers minimizing the failures and creating a blame-free environment. We keep our employees motivated, satisfied, and inspired by using modern and effective tools and processes. We save money by reducing the development period. We collect, share and reuse knowledge. We create an atmosphere of trust and constant self-improving.
 [[overview]]
-== Motivation
+ == Motivation.
 * *High Performer*
 ** Deployment frequency - Releasing to production very frequently
 ** Lead time for changes - Low cycle time in ideas becoming production release code
@@ -15,7 +17,7 @@
 NOTE: Inspired by https://www.goodreads.com/book/show/35747076-accelerate[Accelerate]
 
 == Overview
-Current solution build on top of https://jenkins-x.io[Jenkins X] so please take a look before you jump in. `:)`
+Current solution is built on top of https://jenkins-x.io[Jenkins X]. Please, take a look before you jump in. `:)`
 
 NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes so they can focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
 
