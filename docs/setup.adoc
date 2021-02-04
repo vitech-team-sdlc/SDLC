@@ -15,7 +15,7 @@
 * generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks] `optional`
 * generate Snyk https://snyk.io/blog/service-accounts/[token]  `if you have license` `optional`
 
-WARNING: after a successful login into GCP the user should have full access to cluster resources including the ability to create IAM roles
+WARNING: after a successful login into GCP, the user should have full access to cluster resources including the ability to create IAM roles
 
 === Setup
 ==== 1. Create Infrastructure Repository
@@ -76,7 +76,7 @@ Execute `jx secret verify` and check, if all needed secrets are populated like: 
 
 
 ==== 5. Create application based on SDLC quickstart
-===== 5.1 Spring ?
+===== 5.1 Spring?
 If you need some REST API backend service, use a template with name: `vitech-sdlc-backend`
 
 [source,shell]
@@ -85,7 +85,7 @@ If you need some REST API backend service, use a template with name: `vitech-sdl
 include::{scriptsdir}/quick-start-backend.sh[]
 ----
 
-===== 5.2 Angular / React ?
+===== 5.2 Angular / React?
 If you need a frontend application on Angular use: `vitech-sdlc-frontend`
 
 [source,shell]
