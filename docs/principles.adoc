@@ -1,10 +1,6 @@
 == Principles
 === Trunk Based Development (Branching)
-A source-control branching model, where developers collaborate on code in a single branch called ‘trunk’,
-resist any pressure to create other long-lived development branches by employing documented techniques.
-They, therefore, avoid merge hell, do not break the build, and live happily ever after.
-In some cases, they create short-lived feature branches, but it is not welcome.
-
+Trunk-based development (TBD) is a source-control branching model for software development where developers merge every new feature, bug fix, or other code change to one central branch in the version control system. This branch is called “trunk”. TBD enables continuous integration – and, by extension, continuous delivery – by creating an environment where commits to trunk naturally occur multiple times daily for each programmer. This makes it easy to satisfy the “everyone on the development team commits to trunk at least every 24 hours” requirement of continuous integration and lays the foundation for the codebase to be releasable at any time, as is necessary for continuous delivery and continuous deployment.
 Let’s have a look at the trunk-based development workflow.
 
 ++++
@@ -14,26 +10,26 @@ Let’s have a look at the trunk-based development workflow.
 Typically we use  **Scaled Trunk-Based Development**
 
 ==== Best Practices
-* Only fast forward merges to the trunk.
-* Disallow pushing to the trunk.
+* Only fast-forward merges to trunk.
+* Disallow pushing to trunk.
 * Machine-readable meaning to commit messages.
 * _Merge squash your multiple changes in your short life branches._
-* _Rebasing master against your short-lived branch to keep it up to date is best, do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history._
+* _Rebasing master against your short-lived branch to keep it up to date is the best. Do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history._
 *  Feature branches must be short-lived.
-*  If you are working from a ticketing system, make sure to first mention the ticket number in your commit, and dynamically link them if possible in your repo tool.
-* Keep your commit messages as concise as possible, insofar as they make sense.
-* _You shouldn't do hotfix in this day and age if you can avoid it, it's best to fix forward and not go back, if there has been another feature released since then that you don't want to be included, then disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your life and your repo._
-*  Try and understand git commands and internals first before using graphic tools like git "Kraken". There is nothing wrong with them, they can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.
-* Don't ever commit secrets of any king to the repository  -**EVER**.
+*  If you are working from a ticketing system, make sure you mention the ticket number in your commit at first, and dynamically link them if possible in your repo tool.
+* Keep your commit messages as concise as possible.
+* _You should avoid hotfixes if it is possible. It is better to fix forward and not go back. If there has been another feature released since then and you don't want to be included, disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo._
+*  Try to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.
+* Don't ever commit secrets of any kind to the repository  -**EVER**.
 
-NOTE: More info you can get https://trunkbaseddevelopment.com/[here] and https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f[here]
+NOTE: For more information, see https://trunkbaseddevelopment.com/[here] and https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f[here]
 
 === Quality Gateway
-The **Quality Gateway** is an organizational\infrastructure point through which all product code must pass.
-The intention of having a gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
-thereby preventing incorrect code from passing from the local codebase to a shared codebase.
-To get through the quality gateway code must satisfy several <<tests>>.
-The tests are devised to make sure that the requirement is an accurate statement of the business needs.
+The **Quality Gateway** is an organizational\infrastructure point for testing code. 
+All the code has to be passed through the quality gateway.
+The purpose of a quality gateway is to trap incorrect code and bugs as early as possible to prevent getting the incorrect code from the local codebase into a shared codebase.
+To get through the quality gateway the code must satisfy several <<tests>>.
+The tests are devised to make sure that each requirement meets business needs.
 
 ==== Quality Gates
 
@@ -50,7 +46,7 @@ The tests are devised to make sure that the requirement is an accurate statement
 [[tests]]
 === Test (Test case)
 The **test case** is a specification of the inputs, execution conditions, testing procedure, and expected results that
-define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular
+define a single test to be executed to achieve a particular software testing objective. For example, to exercise a particular
 program path or to verify compliance with a specific requirement. Test cases underlie testing that is methodical rather than haphazard.
 A battery of test cases can be built to produce the desired coverage of the software being tested.
 Formally defined test cases allow the same tests to be run repeatedly against successive versions of the software,
@@ -125,15 +121,15 @@ Test Coverage tools should have separate reports for Medium Tests._
 
 The question a large test attempts to answer is, **“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”**.
 
-Large Tests tend to be much slower than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.
+Large Tests need more time to run than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.
 
-Possible phases/places where **Large Tests** can be running :
+Possible phases/places where **Large Tests** can be running:
 
-* Pull Requests checks (in case if they are relatively fast and overall PR time doesn't go beyond ~15mins)
+* Pull Requests checks (if they are fast enough and overall PR time doesn't go beyond ~15mins)
 * Functional Test Suite in **Continuous Deployment** pipeline (after-deployment step).
 If their run takes too long -- it's expected to have separate **Smoke/Sanity test suite** extracted for that purpose and Functional ones running by separate pipeline.
 * NFRs gate in **Continuous Deployment** pipeline. It's expected that desired/existed application benchmarks have
-been already collected by performance tests and put as an NFR's thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.
+been already collected by performance tests and put as an NFR's thresholds/gates. Metrics collected during NFR gate tests have to be trended in time.
 
 === Versions
 https://semver.org[Semantic Versioning]
