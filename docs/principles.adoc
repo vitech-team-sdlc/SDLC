@@ -1,6 +1,6 @@
 == Principles
 === Trunk Based Development (Branching)
-Trunk-based development (TBD) is a source-control branching model for software development where developers merge every new feature, bug fix, or other code change to one central branch in the version control system. This branch is called “trunk”. TBD enables continuous integration – and, by extension, continuous delivery – by creating an environment where commits to trunk naturally occur multiple times daily for each programmer. This makes it easy to satisfy the “everyone on the development team commits to trunk at least every 24 hours” requirement of continuous integration and lays the foundation for the codebase to be releasable at any time, as is necessary for continuous delivery and continuous deployment.
+Trunk-based development (TBD) is a source-control branching model for software development where developers merge every new feature, bug fix, or other code changes to one central branch in the version control system. This branch is called “trunk”. TBD enables continuous integration – and, by extension, continuous delivery – by creating an environment where commits to trunk naturally occur multiple times daily for each programmer. This makes it easy to satisfy the “everyone on the development team commits to trunk at least every 24 hours” requirement of continuous integration and lays the foundation for the codebase to be releasable at any time, as is necessary for continuous delivery and continuous deployment.
 Let’s have a look at the trunk-based development workflow.
 
 ++++
@@ -10,25 +10,24 @@ Let’s have a look at the trunk-based development workflow.
 Typically we use  **Scaled Trunk-Based Development**
 
 ==== Best Practices
-* Only fast-forward merges to trunk.
+* Use only fast-forward merges to trunk.
 * Disallow pushing to trunk.
-* Machine-readable meaning to commit messages.
+* Write machine-readable commit messages.
 * _Merge squash your multiple changes in your short life branches._
-* _Rebasing master against your short-lived branch to keep it up to date is the best. Do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history._
+* _Rebase master against your short-lived branch to keep it up to date. Do NOT merge master back to your short-lived branch and then back again to trunk, to avoid multiple merge comments and confusing history._
 *  Feature branches must be short-lived.
-*  If you are working from a ticketing system, make sure you mention the ticket number in your commit at first, and dynamically link them if possible in your repo tool.
+*  If you are working with a ticketing system, make sure you add the ticket number to each commit.
 * Keep your commit messages as concise as possible.
-* _You should avoid hotfixes if it is possible. It is better to fix forward and not go back. If there has been another feature released since then and you don't want to be included, disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo._
-*  Try to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.
+* _Avoid hotfixes. Fixing forward is better than rolling back. If you don't want to include another feature that has been released, disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo._
+*  Try to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, you still need to learn certain basic things like the difference between revert and reset.
 * Don't ever commit secrets of any kind to the repository  -**EVER**.
 
 NOTE: For more information, see https://trunkbaseddevelopment.com/[here] and https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f[here]
 
 === Quality Gateway
 The **Quality Gateway** is an organizational\infrastructure point for testing code. 
-All the code has to be passed through the quality gateway.
 The purpose of a quality gateway is to trap incorrect code and bugs as early as possible to prevent getting the incorrect code from the local codebase into a shared codebase.
-To get through the quality gateway the code must satisfy several <<tests>>.
+To get through the quality gateway, the code must satisfy several <<tests>>.
 The tests are devised to make sure that each requirement meets business needs.
 
 ==== Quality Gates
@@ -75,32 +74,32 @@ and hardly ever by <<roles-tes, TEs>>. Small tests usually require mocks and fak
 are too buggy to be reliable, or too difficult to emulate error conditions.) [TEs](https://github.com/vitech-team/SDLC/wiki/Glossary)
 rarely write small tests but might run them when they are trying to diagnose a particular failure.
 
-The question a small test attempts to answer is, **"Does this code do what it is supposed to do?"**.
+Small tests try to answer the following question: **"Does this code do what it is supposed to do?"**.
 
-_Small Tests are to be running during **test** build phase in **Continuous Integration** pipeline._
+_Running of small tests is usually required during **test** build phase in **Continuous Integration** pipeline._
 
 IMPORTANT: A test that doesn't require dependency on external resources (file system, database, network, http://wiremock.org[wiremocks], another OS process) is a small one.
 
 [[medium-test]]
 ==== Medium Tests
-**Medium tests** are regularly automated and involve a pair or more interacting features.
+**Medium tests** are regularly automated and involve two or more interacting features.
 _The focus is on testing the interaction between features_ that call each other or interact directly, usually,
-we call these nearest neighbor functions. <<roles-set, SETs>> support the development of these tests early in the product cycle as individual
-features are completed and <<roles-swe, SWEs>> are heavily involved in writing, debugging, and maintaining the actual tests.
+we call them nearest neighbor functions. <<roles-set, SETs>> supports the development of medium tests early in the product cycle as individual
+features that are completed and <<roles-swe, SWEs>> heavily involved in writing, debugging, and maintaining the actual tests.
 If a medium test fails or breaks, the developer takes care of it autonomously.
 
 In a majority of cases <<medium-test>> reflect **Integration Tests** in testing terminology.
 
 Later in the development cycle, <<roles-tes, TEs>> can execute medium tests either manually (in the event the test is difficult or prohibitively costly to automate) or with automation.
 
-The question a medium test answer is, **"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"**.
+Medium tests try to answer the following question: **"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"**.
 
 For a specific function under test, the neighbor function could be: **another component, module, network interface, file system, database, message broker, storage, etc**.
 In the majority of cases, medium tests rely on an external process running on the same host/VM/container.
 A good example of an external process is a docker service running on the same host/VM with a test-runner process, which can be utilized by https://www.testcontainers.org/[testcontainers] framework.
 
 _Medium Tests must be separated from Small Tests in a project structure.
-They are to be running during **integration-test** build phase in **Continuous Integration** pipeline.
+Running of medium tests is usually required during **integration-test** build phase in **Continuous Integration** pipeline.
 Test Coverage tools should have separate reports for Medium Tests._
 
 **It's expected that medium tests shouldn't run longer than 5-10 minutes. The majority of time is usually spent on a dependent process start, but once they are running - tests should complete fast.**
@@ -108,7 +107,7 @@ Test Coverage tools should have separate reports for Medium Tests._
 [[large-test]]
 ==== Large Tests
 
-**Large tests** are running over component(s) deployed to the environment by the same **Continuous Deployment** pipeline that deploys to production.
+**Large tests** are usually running over component(s) deployed to the environment by the same **Continuous Deployment** pipeline that deploys to production.
 
 **Large Tests** can be reflected by the following test suites:
 
@@ -117,17 +116,17 @@ Test Coverage tools should have separate reports for Medium Tests._
 * Load/Stress/Performance (NFR gates)
 * Security
 * Smoke/Sanity
-* any other ones which are running over deployed components
+* Any other tests which are running over deployed components
 
-The question a large test attempts to answer is, **“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”**.
+Lrge tests try to answer the following question: **“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”**.
 
-Large Tests need more time to run than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.
+Large Tests need more time to run than medium tests, they rely on a full PROD-like deployment alongside real (not stubbed/mocked) infrastructure services.
 
-Possible phases/places where **Large Tests** can be running:
+Running of **Large Tests** can be required in the following phases/places:
 
 * Pull Requests checks (if they are fast enough and overall PR time doesn't go beyond ~15mins)
 * Functional Test Suite in **Continuous Deployment** pipeline (after-deployment step).
-If their run takes too long -- it's expected to have separate **Smoke/Sanity test suite** extracted for that purpose and Functional ones running by separate pipeline.
+If their run takes too long -- it's expected to have separate **Smoke/Sanity test suite** extracted for that purpose, and running of Functional tests can be executed by separate pipeline.
 * NFRs gate in **Continuous Deployment** pipeline. It's expected that desired/existed application benchmarks have
 been already collected by performance tests and put as an NFR's thresholds/gates. Metrics collected during NFR gate tests have to be trended in time.
 
@@ -136,8 +135,8 @@ https://semver.org[Semantic Versioning]
 
 Given a version number `MAJOR.MINOR.PATCH`, increment the:
 
-* *MAJOR* - version when you make incompatible API changes,
-* *MINOR* - version when you add functionality in a backward compatible manner, and
+* *MAJOR* - version when you make incompatible API changes.
+* *MINOR* - version when you add functionality in a backward compatible manner.
 * *PATCH* - version when you make backward compatible bug fixes.
 
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
@@ -147,10 +146,10 @@ Example:
 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 ----
 
-Version change should be driven by commit messages like described in https://www.conventionalcommits.org/en/v1.0.0/[Conventional Commits]
+Version change should be driven by commit messages. See examples: https://www.conventionalcommits.org/en/v1.0.0/[Conventional Commits]
 
 [[roles]]
 === Roles
 * [[roles-swe]]**SWE** -Software Engineer.
-* [[roles-set]]**SET** -Software engineer in Testing. This person is responsible for the complete design of the test cases and to maintain them.
+* [[roles-set]]**SET** -Software engineer in Testing is responsible for the complete design and maintenance of the test cases.
 * [[roles-tes]]**TEs** -Test engineers.
