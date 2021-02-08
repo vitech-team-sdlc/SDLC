@@ -8,7 +8,7 @@ NOTE: Inspired by https://www.goodreads.com/book/show/35747076-accelerate[Accele
 == Overview
 Current solution is built on top of https://jenkins-x.io[Jenkins X]. Please, take a look before you jump in. `:)`
 
-NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes so they can focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
+NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes allowing them to focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
 
 
 === Architecture
