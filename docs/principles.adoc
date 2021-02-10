@@ -7,20 +7,20 @@ Let’s have a look at the trunk-based development workflow.
 <iframe style="border:none" width="100%" height="900px" src="https://whimsical.com/embed/95zX1zeN2DCPYAo4an3xXz"></iframe>
 ++++
 
-Typically we use  **Scaled Trunk-Based Development**
+Typically we use  **Scaled Trunk-Based Development**.
 
 ==== Best Practices
-* Use only fast-forward merges to trunk.
-* Disallow pushing to trunk.
-* Write machine-readable commit messages.
-* _Merge squash your multiple changes in your short life branches._
-* _The best practice is to rebase master against your short-lived branch to keep it up to date. Do NOT merge master back to your short-lived branch and then again to trunk, to avoid multiple merge comments and confusing history._
+* We use only fast-forward merges to trunk.
+* We disallow pushing to trunk.
+* We write machine-readable commit messages.
+* _We merge squash multiple changes in short life branches._
+* _The best practice is to rebase master against short-lived branch to keep it up to date. We do NOT merge master back to short-lived branch and then again to trunk, to avoid multiple merge comments and confusing history._
 *  Feature branches must be short-lived.
-*  If you are working with a ticketing system, make sure you add the ticket number to each commit.
-* Keep your commit messages as concise as possible.
-* _Avoid hotfixes. Fixing forward is better than rolling back. If you don't want to include another feature that has been released, disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo._
-*  Try to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, you still need to learn certain basic things like the difference between revert and reset.
-* Don't ever commit secrets of any kind to the repository  -**EVER**.
+*  We work with a ticketing system, and add the ticket number to each commit.
+* We keep commit messages as concise as possible.
+* _We avoid hotfixes. Fixing forward is better than rolling back. If we don't want to include another feature that has been released, we disable it with feature flags. We want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo._
+*  We have to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, we still need to know certain basic things like the difference between revert and reset.
+* We never commit secrets of any kind to the repository  -**EVER**.
 
 NOTE: For more information, see https://trunkbaseddevelopment.com/[here] and https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f[here]
 
@@ -39,12 +39,12 @@ The tests are devised to make sure that each requirement meets business needs.
 * <<medium-test>> `local`.
 * Code Compilation `remote`.
 * Static analysis `remote`.
-* <<medium-test>> `remote`. _Optional if acceptable by 10 minutes rule_
+* <<medium-test>> `remote`. _Optional if acceptable by 10 minutes rule_.
 * <<large-test>> `remote`.
 
 [[tests]]
 === Test (Test case)
-The **test case** is a specification of the inputs, execution conditions, testing procedure, and expected results that
+The **test case** is a specification of the inputs, execution conditions, testing procedures, and expected results that
 define a single test to be executed to achieve a particular software testing objective. For example, to exercise a particular
 program path or to verify compliance with a specific requirement. Test cases underlie testing that is methodical rather than haphazard.
 A battery of test cases can be built to produce the desired coverage of the software being tested.
@@ -74,7 +74,7 @@ and hardly ever by <<roles-tes, TEs>>. Small tests usually require mocks and fak
 are too buggy to be reliable, or too difficult to emulate error conditions.) [TEs](https://github.com/vitech-team/SDLC/wiki/Glossary)
 rarely write small tests but might run them when they are trying to diagnose a particular failure.
 
-Small tests try to answer the following question: **"Does this code do what it is supposed to do?"**.
+Small tests try to answer the following question: **"Does this code do what it is supposed to do?"**
 
 _Running of small tests is usually required during **test** build phase in **Continuous Integration** pipeline._
 
@@ -109,14 +109,14 @@ Test Coverage tools should have separate reports for Medium Tests._
 
 **Large Tests** can be reflected by the following test suites:
 
-* End-To-End
-* Functional
-* Load/Stress/Performance (NFR gates)
-* Security
-* Smoke/Sanity
-* Any other tests which are running over deployed components
+* End-To-End.
+* Functional.
+* Load/Stress/Performance (NFR gates).
+* Security.
+* Smoke/Sanity.
+* Any other tests which are running over deployed components.
 
-Large tests try to answer the following question: **“Does the product operate the way a user expects (from functional and non-functional requirements perspective) and produce the desired results?”**.
+Large tests try to answer the following question: **“Does the product operate the way a user expects (from functional and non-functional requirements perspective) and produce the desired results?”**
 
 Large Tests need more time to run than medium tests, they rely on a full PROD-like deployment alongside real (not stubbed/mocked) infrastructure services.
 
@@ -144,7 +144,7 @@ Example:
 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 ----
 
-Version change should be driven by commit messages. See examples: https://www.conventionalcommits.org/en/v1.0.0/[Conventional Commits]
+Version change should be driven by commit messages. See examples: https://www.conventionalcommits.org/en/v1.0.0/[Conventional Commits].
 
 [[roles]]
 === Roles
