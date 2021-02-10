@@ -5,49 +5,49 @@
 [[setup]]
 === Prerequisites
 * https://github.com/join[Create a git user for a bot] (different from your own personal user account) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], which will be used by Jenkins X to interact with git repositories.
-* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI] (version `== 13.5`)
-* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI]
-* https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK]
-** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API.] (Implement only the first item of the provided guide)
-** Login `gcloud auth application-default login`
-** Make sure, the user has *full access* to GCP resources
-* Generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token]
-* Generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks] `optional`
-* Generate Snyk https://snyk.io/blog/service-accounts/[token]  `if you have license` `optional`
+* https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI] (version `== 13.5`).
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI].
+* https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK].
+** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API.] (Implement only the first item of the provided guide).
+** Login `gcloud auth application-default login`.
+** Make sure, the user has *full access* to GCP resources.
+* Generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token].
+* Generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks] `optional`.
+* Generate Snyk https://snyk.io/blog/service-accounts/[token]  `if you have license` `optional`.
 
 WARNING: After a successful login into GCP, the user should have full access to cluster resources including the ability to create IAM roles.
 
 === Setup
-==== 1. Create Infrastructure Repository
-Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate
+==== 1. Create Infrastructure Repository.
+Create infrastructure repository for GKE: https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate.
 
 WARNING: Do not clone the created repository on your local machine, it will be done automatically by the <<3. Prepare install script, install script>>.
 
-==== 2. Create Environment Repository
-Create environment repository: https://github.com/vitech-team/jx3-gke-vault/generate
+==== 2. Create Environment Repository.
+Create environment repository: https://github.com/vitech-team/jx3-gke-vault/generate.
 
-==== 3. Prepare install script
+==== 3. Prepare install script.
 
 [source,shell]
 .install.sh
 ----
 include::{scriptsdir}/install.sh[]
 ----
-<1> Infrastructure repository name
-<2> Environment repository name
-<3> Infra. and env. repo URLs
-<4> GitHub username and token. *User should have settings permission to all repositories*
-<5> Cluster name
-<6> GCP project id
-<7> Cluster zone: https://cloud.google.com/compute/docs/regions-zones#available
-<8> Default node count
-<9> If buckets and PVCs should be deleted in case of `terraform destroy` command
-<10> Store cluster configs in file. For more configs, see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs
+<1> Infrastructure repository name.
+<2> Environment repository name.
+<3> Infra. and env. repo URLs.
+<4> GitHub username and token. *User should have settings permission to all repositories*.
+<5> Cluster name.
+<6> GCP project id.
+<7> Cluster zone: https://cloud.google.com/compute/docs/regions-zones#available.
+<8> Default node count.
+<9> If buckets and PVCs should be deleted in case of `terraform destroy` command.
+<10> Store cluster configs in file. For more configs, see: https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs.
 
 *Put the script into the folder, where you want to clone your repositories, and execute it.*
 
-==== 4. Populate secrets
-===== 4.1 Create vault proxy
+==== 4. Populate secrets.
+===== 4.1 Create vault proxy.
 First, we need to start the vault proxy
 [source,shell]
 .sec-vault-start.sh
@@ -69,15 +69,15 @@ include::{scriptsdir}/sec-auto-populate.sh[]
 include::{scriptsdir}/sec-required-populate.sh[]
 ----
 
-NOTE: Secrets can be populated via Vault UI as well: <<runbook-vault>>
+NOTE: Secrets can be populated via Vault UI as well: <<runbook-vault>>.
 
 ===== 4.4 Verify secrets
 Execute `jx secret verify` and check, if all needed secrets are populated like: `sonar`, `slack`, etc...
 
 
-==== 5. Create application based on SDLC quickstart
+==== 5. Create application based on SDLC quickstart.
 ===== 5.1 Spring?
-If you need some REST API backend service, use a template name: `vitech-sdlc-backend`
+If you need some REST API backend service, use a template name: `vitech-sdlc-backend`.
 
 [source,shell]
 .quick-start-backend.sh
@@ -86,7 +86,7 @@ include::{scriptsdir}/quick-start-backend.sh[]
 ----
 
 ===== 5.2 Angular / React?
-If you need a frontend application on Angular, use: `vitech-sdlc-frontend`
+If you need a frontend application on Angular, use: `vitech-sdlc-frontend`.
 
 [source,shell]
 .quickstart-forntend.sh
@@ -96,12 +96,12 @@ include::{scriptsdir}/quickstart-forntend.sh[]
 
 After setup, you need to edit default configs in the `environments` folder.
 
-* keycloak url: `kubectrl get ingress -n keycloak`
-* change backend service name in `nginx.conf`
+* keycloak url: `kubectrl get ingress -n keycloak`.
+* change backend service name in `nginx.conf`.
 
-==== Setup nexus npm proxy
+==== Setup nexus npm proxy.
 How to setup Nexus proxy for NPM,
-see: https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages
+see: https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages.
 
 ```shell
 NPM_CONF="~/.npmrc"
