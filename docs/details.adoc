@@ -17,7 +17,7 @@ NOTE: For more information about pipelines on JX, see https://jenkins-x.io/docs/
 Currently, we have only Large Tests implementation based on https://webdriver.io[WebdriverIO].
 We have added a few steps to `release` and `pullrequest` pipelines:
 
-* Check if the large test has been executed on *Staging* before promote it to Production *environment*
+* Check if the large test has been executed on *Staging* before promote it to Production *environment*.
 * Execute *Large Tests* after changes applied on Production environment.
 
 ===== Enable
