@@ -29,12 +29,13 @@ NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Conti
 
 ==== Pull Request flow
 * https://www.conventionalcommits.org/en/v1.0.0/[conventional commits] scan - https://github.com/aevea/commitsar[Commitsar]
-* gradle build - including <<#small-test>> & <<#medium-test>>
 * scan for secrets - https://github.com/zricethezav/gitleaks[Gitleaks]
-* container build - using https://paketo.io[Paketo Buildpacks]
+* build - including <<#small-test>> & <<#medium-test>>
+* dependencies check - https://owasp.org/www-project-dependency-check/[OWASP Dependency-Check]
+* container build - using https://paketo.io[Paketo Buildpacks] or https://github.com/GoogleContainerTools/kaniko[Kaniko]
 * container scan - https://github.com/aquasecurity/trivy[Trivy] & https://github.com/goodwithtech/dockle[Dockle]
 * static code analyse - https://www.sonarqube.org[sonar]
-* preview environment - JX
+* preview environment creation - JX (preview folder in imported project)
 
 === Stack
 * https://jenkins-x.io[Jenkins X] - CORE
