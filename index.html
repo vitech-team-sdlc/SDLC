@@ -546,6 +546,10 @@ pre.rouge .mo {
 pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
   color: #009999;
 }
+pre.rouge .sa {
+  color: #000000;
+  font-weight: bold;
+}
 pre.rouge .sb {
   color: #d14;
 }
@@ -579,7 +583,7 @@ pre.rouge .s1 {
 pre.rouge .ss {
   color: #990073;
 }
-pre.rouge .s, pre.rouge .sa, pre.rouge .dl {
+pre.rouge .s, pre.rouge .dl {
   color: #d14;
 }
 pre.rouge .na {
@@ -663,7 +667,6 @@ pre.rouge {
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#overview">Motivation</a></li>
 <li><a href="#_overview">Overview</a>
 <ul class="sectlevel2">
 <li><a href="#_architecture">Architecture</a></li>
@@ -689,7 +692,7 @@ pre.rouge {
 </li>
 <li><a href="#_other">Other</a>
 <ul class="sectlevel2">
-<li><a href="#_connect-to-existing-cluster-jx">Connect to existing cluster / JX</a></li>
+<li><a href="#_connect-to-the-existing-cluster-jx">Connect to the existing cluster / JX.</a></li>
 <li><a href="#_jx">JX</a></li>
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_github-project">GitHub project</a></li>
@@ -706,51 +709,11 @@ pre.rouge {
 <div id="preamble">
 <div class="sectionbody">
 <!-- toc disabled -->
+<div class="paragraph">
+<p>VITech Software Development Life Cycle Manual</p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="overview"><a class="anchor" href="#overview"></a>Motivation</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><strong>High Performer</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Deployment frequency - Releasing to production very frequently</p>
-</li>
-<li>
-<p>Lead time for changes - Low cycle time in ideas becoming production release code</p>
-</li>
-<li>
-<p>Mean time to recovery - Being able to recover in production quickly</p>
-</li>
-<li>
-<p>Change failure rate - Minimizing the failures that are incurred from changes</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Creating a <strong>blame-free environment</strong>, striving to learn from failures.</p>
-</li>
-<li>
-<p><strong>Employee satisfaction</strong> - keep people motivated and inspired by using modern and effective tools and processes</p>
-</li>
-<li>
-<p><span class="line-through">Reinvent</span> a wheel</p>
-</li>
-<li>
-<p><strong>reduce</strong> time to start <strong>new project</strong></p>
-</li>
-<li>
-<p><strong>re-use knowledge</strong> and best practices in a predicted and <strong>manageable ways</strong></p>
-</li>
-<li>
-<p><strong>build community</strong> around so that members constantly improve and make it better</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>This document is created to represent our SDLC. Our development process is effective, modern, scalable, and lightweight. Our methods make us competitive compared with other top-performing companies, we can work fast without losing efficiency. We can deliver value to customers minimizing the failures and creating a blame-free environment. We keep our employees motivated, satisfied, and inspired by using modern and effective tools and processes. We save money by reducing the development period. We collect, share and reuse knowledge. We create an atmosphere of trust and constant self-improving.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -770,7 +733,7 @@ Inspired by <a href="https://www.goodreads.com/book/show/35747076-accelerate">Ac
 <h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Current solution build on top of <a href="https://jenkins-x.io">Jenkins X</a> so please take a look before you jump in. <code>:)</code></p>
+<p>Current solution is built on top of <a href="https://jenkins-x.io">Jenkins X</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -779,7 +742,7 @@ Inspired by <a href="https://www.goodreads.com/book/show/35747076-accelerate">Ac
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes so they can focus on building awesome software and not waste time figuring out how to use the cloud or manually create and maintain pipelines.
+Jenkins X aims to automate and accelerate Continuous Integration and Continuous Delivery for developers on the cloud and/or Kubernetes allowing them to focus on building awesome software instead of figuring out how to use the cloud or manually create and maintain pipelines.
 </td>
 </tr>
 </table>
@@ -806,22 +769,25 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <p><a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a> scan - <a href="https://github.com/aevea/commitsar">Commitsar</a></p>
 </li>
 <li>
-<p>gradle build - including <a href="#small-test">Small Tests</a> &amp; <a href="#medium-test">Medium Tests</a></p>
-</li>
-<li>
 <p>scan for secrets - <a href="https://github.com/zricethezav/gitleaks">Gitleaks</a></p>
 </li>
 <li>
-<p>container build - using <a href="https://paketo.io">Paketo Buildpacks</a></p>
+<p>build - including <a href="#small-test">Small Tests</a> &amp; <a href="#medium-test">Medium Tests</a></p>
 </li>
 <li>
-<p>container scan - <a href="https://github.com/aquasecurity/trivy">Trivy</a> &amp; <a href="https://github.com/goodwithtech/dockle">Dockle</a></p>
+<p>dependencies check - <a href="https://owasp.org/www-project-dependency-check/">OWASP Dependency-Check</a></p>
+</li>
+<li>
+<p>container build - using <a href="https://paketo.io">Paketo Buildpacks</a> or <a href="https://github.com/GoogleContainerTools/kaniko">Kaniko</a></p>
+</li>
+<li>
+<p>container scan - (<a href="https://github.com/aquasecurity/trivy">Trivy</a> &amp; <a href="https://github.com/goodwithtech/dockle">Dockle</a>) or Snyk</p>
 </li>
 <li>
 <p>static code analyse - <a href="https://www.sonarqube.org">sonar</a></p>
 </li>
 <li>
-<p>preview environment - JX</p>
+<p>preview environment creation - JX (preview folder in imported project)</p>
 </li>
 </ul>
 </div>
@@ -862,38 +828,38 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/join">Create a git user for a bot</a> (different from your own personal user) and generate a <a href="https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook">personal access token</a>, this will be used by Jenkins X to interact with git repositories.</p>
+<p><a href="https://github.com/join">Create a git user for a bot</a> (different from your own personal user account) and generate a <a href="https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook">personal access token</a>, which will be used by Jenkins X to interact with git repositories.</p>
 </li>
 <li>
-<p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a> (version <code>== 13.5</code>)</p>
+<p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a> (version <code>== 13.5</code>).</p>
 </li>
 <li>
-<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a></p>
+<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a>.</p>
 </li>
 <li>
-<p><a href="https://cloud.google.com/sdk/docs/quickstart#linux">Google Cloud SDK</a></p>
+<p><a href="https://cloud.google.com/sdk/docs/quickstart#linux">Google Cloud SDK</a>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Ensure that you have enabled the IAM Service Account Credentials API.</a> (Implement only the first item of the provided guide)</p>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Ensure that you have enabled the IAM Service Account Credentials API.</a> (Implement only the first item of the provided guide).</p>
 </li>
 <li>
-<p>login <code>gcloud auth application-default login</code></p>
+<p>Login <code>gcloud auth application-default login</code>.</p>
 </li>
 <li>
-<p>make sure user have <strong>full access</strong> to GCP resources</p>
+<p>Make sure, the user has <strong>full access</strong> to GCP resources.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>generate Sonar cloud <a href="https://docs.sonarqube.org/latest/user-guide/user-token/">token</a></p>
+<p>Generate Sonar cloud <a href="https://docs.sonarqube.org/latest/user-guide/user-token/">token</a>.</p>
 </li>
 <li>
-<p>generate Slack <a href="https://api.slack.com/messaging/webhooks#getting_started">Incoming Webhooks</a> <code>optional</code></p>
+<p>Generate Slack <a href="https://api.slack.com/messaging/webhooks#getting_started">Incoming Webhooks</a> <code>optional</code>.</p>
 </li>
 <li>
-<p>generate Snyk <a href="https://snyk.io/blog/service-accounts/">token</a>  <code>if you have license</code> <code>optional</code></p>
+<p>Generate Snyk <a href="https://snyk.io/blog/service-accounts/">token</a>  <code>if you have license</code> <code>optional</code>.</p>
 </li>
 </ul>
 </div>
@@ -904,7 +870,7 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-logged user into GCP should have full access to cluster resources including IAM roles creation
+After a successful login into GCP, the user should have full access to cluster resources including the ability to create IAM roles.
 </td>
 </tr>
 </table>
@@ -913,9 +879,9 @@ logged user into GCP should have full access to cluster resources including IAM 
 <div class="sect2">
 <h3 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h3>
 <div class="sect3">
-<h4 id="_1-create-infrastructure-repository"><a class="anchor" href="#_1-create-infrastructure-repository"></a>1. Create Infrastructure Repository</h4>
+<h4 id="_1-create-infrastructure-repository"><a class="anchor" href="#_1-create-infrastructure-repository"></a>1. Create Infrastructure Repository.</h4>
 <div class="paragraph">
-<p>Create infrastructure repository for GKE: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate</a></p>
+<p>Create infrastructure repository for GKE: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke/generate</a>.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -924,20 +890,20 @@ logged user into GCP should have full access to cluster resources including IAM 
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Do not clone the created repository to your local machine, it will be done automatically by the <a href="#_3-prepare-install-script">install script</a>.
+Do not clone the created repository on your local machine, it will be done automatically by the <a href="#3. Prepare install script">install script</a>.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2-create-environment-repository"><a class="anchor" href="#_2-create-environment-repository"></a>2. Create Environment Repository</h4>
+<h4 id="_2-create-environment-repository"><a class="anchor" href="#_2-create-environment-repository"></a>2. Create Environment Repository.</h4>
 <div class="paragraph">
-<p>Create environment repository: <a href="https://github.com/vitech-team/jx3-gke-vault/generate" class="bare">https://github.com/vitech-team/jx3-gke-vault/generate</a></p>
+<p>Create environment repository: <a href="https://github.com/vitech-team/jx3-gke-vault/generate" class="bare">https://github.com/vitech-team/jx3-gke-vault/generate</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3-prepare-install-script"><a class="anchor" href="#_3-prepare-install-script"></a>3. Prepare install script</h4>
+<h4 id="_3-prepare-install-script"><a class="anchor" href="#_3-prepare-install-script"></a>3. Prepare install script.</h4>
 <div class="listingblock">
 <div class="title">install.sh</div>
 <div class="content">
@@ -1026,56 +992,56 @@ jx secret edit <span class="nt">-f</span> sonar
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>infrastructure repository name</td>
+<td>Infrastructure repository name.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>environment repository name</td>
+<td>Environment repository name.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>infra. and env. repo URLs</td>
+<td>Infra. and env. repo URLs.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>GitHub username and token. <strong>User should have settings permission to all repositories</strong></td>
+<td>GitHub username and token. <strong>User should have settings permission to all repositories</strong>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>cluster name</td>
+<td>Cluster name.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>GCP project id</td>
+<td>GCP project id.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>cluster zone: <a href="https://cloud.google.com/compute/docs/regions-zones#available" class="bare">https://cloud.google.com/compute/docs/regions-zones#available</a></td>
+<td>Cluster zone: <a href="https://cloud.google.com/compute/docs/regions-zones#available" class="bare">https://cloud.google.com/compute/docs/regions-zones#available</a>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>default node count</td>
+<td>Default node count.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>if buckets and PVCs should be deleted in case of <code>terraform destroy</code> command</td>
+<td>If buckets and PVCs should be deleted in case of <code>terraform destroy</code> command.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="10"></i><b>10</b></td>
-<td>store cluster configs in file. for more configs see: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs</a></td>
+<td>Store cluster configs in file. For more configs, see: <a href="https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs" class="bare">https://github.com/jx3-gitops-repositories/jx3-terraform-gke#terraform-inputs</a>.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p><strong>Put the script into the folder, where you want to clone your repositories and execute it.</strong></p>
+<p><strong>Put the script into the folder, where you want to clone your repositories, and execute it.</strong></p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_4-populate-secrets"><a class="anchor" href="#_4-populate-secrets"></a>4. Populate secrets</h4>
+<h4 id="_4-populate-secrets"><a class="anchor" href="#_4-populate-secrets"></a>4. Populate secrets.</h4>
 <div class="sect4">
-<h5 id="_4-1-create-vault-proxy"><a class="anchor" href="#_4-1-create-vault-proxy"></a>4.1 Create vault proxy</h5>
+<h5 id="_4-1-create-vault-proxy"><a class="anchor" href="#_4-1-create-vault-proxy"></a>4.1 Create vault proxy.</h5>
 <div class="paragraph">
-<p>Fist we need start vault proxy</p>
+<p>First, we need to start the vault proxy</p>
 </div>
 <div class="listingblock">
 <div class="title">sec-vault-start.sh</div>
@@ -1112,7 +1078,7 @@ jx secret edit <span class="nt">-f</span> sonar</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Secrets also can be populated via Vault UI see: <a href="#runbook-vault">Vault</a>
+Secrets can be populated via Vault UI as well: <a href="#runbook-vault">Vault</a>.
 </td>
 </tr>
 </table>
@@ -1121,16 +1087,16 @@ Secrets also can be populated via Vault UI see: <a href="#runbook-vault">Vault</
 <div class="sect4">
 <h5 id="_4-4-verify-secrets"><a class="anchor" href="#_4-4-verify-secrets"></a>4.4 Verify secrets</h5>
 <div class="paragraph">
-<p>Execute <code>jx secret verify</code> and check if all needed secrets are populated like: <code>sonar</code>, <code>slack</code>, etc&#8230;&#8203;</p>
+<p>Execute <code>jx secret verify</code> and check, if all needed secrets are populated like: <code>sonar</code>, <code>slack</code>, etc&#8230;&#8203;</p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_5-create-application-based-on-sdlc-quickstart"><a class="anchor" href="#_5-create-application-based-on-sdlc-quickstart"></a>5. Create application based on SDLC quickstart</h4>
+<h4 id="_5-create-application-based-on-sdlc-quickstart"><a class="anchor" href="#_5-create-application-based-on-sdlc-quickstart"></a>5. Create application based on SDLC quickstart.</h4>
 <div class="sect4">
-<h5 id="_5-1-spring"><a class="anchor" href="#_5-1-spring"></a>5.1 Spring ?</h5>
+<h5 id="_5-1-spring"><a class="anchor" href="#_5-1-spring"></a>5.1 Spring?</h5>
 <div class="paragraph">
-<p>If you need some REST API backend service use template with name: <code>vitech-sdlc-backend</code></p>
+<p>If you need some REST API backend service, use a template name: <code>vitech-sdlc-backend</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">quick-start-backend.sh</div>
@@ -1140,9 +1106,9 @@ Secrets also can be populated via Vault UI see: <a href="#runbook-vault">Vault</
 </div>
 </div>
 <div class="sect4">
-<h5 id="_5-2-angular-react"><a class="anchor" href="#_5-2-angular-react"></a>5.2 Angular / React ?</h5>
+<h5 id="_5-2-angular-react"><a class="anchor" href="#_5-2-angular-react"></a>5.2 Angular / React?</h5>
 <div class="paragraph">
-<p>If you need frontend application on Angular use: <code>vitech-sdlc-frontend</code></p>
+<p>If you need a frontend application on Angular, use: <code>vitech-sdlc-frontend</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">quickstart-forntend.sh</div>
@@ -1151,25 +1117,25 @@ Secrets also can be populated via Vault UI see: <a href="#runbook-vault">Vault</
 </div>
 </div>
 <div class="paragraph">
-<p>After setup you need edit default configs in <code>environments</code> folder.</p>
+<p>After setup, you need to edit default configs in the <code>environments</code> folder.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>keycloak url: <code>kubectrl get ingress -n keycloak</code></p>
+<p>keycloak url: <code>kubectrl get ingress -n keycloak</code>.</p>
 </li>
 <li>
-<p>change backend service name in <code>nginx.conf</code></p>
+<p>change backend service name in <code>nginx.conf</code>.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setup-nexus-npm-proxy"><a class="anchor" href="#_setup-nexus-npm-proxy"></a>Setup nexus npm proxy</h4>
+<h4 id="_setup-nexus-npm-proxy"><a class="anchor" href="#_setup-nexus-npm-proxy"></a>Setup nexus npm proxy.</h4>
 <div class="paragraph">
-<p>How to setup  Nexus proxy for NPM.
-also see: <a href="https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages" class="bare">https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages</a></p>
+<p>How to setup Nexus proxy for NPM,
+see: <a href="https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages" class="bare">https://blog.sonatype.com/using-nexus-3-as-your-repository-part-2-npm-packages</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1195,16 +1161,16 @@ also see: <a href="https://blog.sonatype.com/using-nexus-3-as-your-repository-pa
 <div class="sect4">
 <h5 id="_pipelines-catalog-and-pack"><a class="anchor" href="#_pipelines-catalog-and-pack"></a>Pipelines catalog and pack</h5>
 <div class="paragraph">
-<p>All shared tasks and packs stored in: <a href="https://github.com/vitech-team/tekton-pipelines-catalog" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog</a></p>
+<p>All shared tasks and packs are stored in: <a href="https://github.com/vitech-team/tekton-pipelines-catalog" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog</a>.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_packs"><a class="anchor" href="#_packs"></a>Packs</h5>
 <div class="paragraph">
-<p>Custom packs: <a href="https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs</a></p>
+<p>Custom packs: <a href="https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs" class="bare">https://github.com/vitech-team/tekton-pipelines-catalog/tree/master/packs</a>.</p>
 </div>
 <div class="paragraph">
-<p>All tasks, packs and pipelines are in sync with <a href="https://github.com/vitech-team/jx3-gke-vault">environment repository</a> via <a href="https://googlecontainertools.github.io/kpt/">Kpt</a>.</p>
+<p>All tasks, packs and pipelines are managed by syncing to <a href="https://github.com/vitech-team/jx3-gke-vault">environment repository</a> via <a href="https://googlecontainertools.github.io/kpt/">Kpt</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1213,7 +1179,7 @@ also see: <a href="https://blog.sonatype.com/using-nexus-3-as-your-repository-pa
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-more information about tasks and pipelines check <a href="https://github.com/tektoncd/pipeline">Tekton docs</a>
+For more information about tasks and pipelines, check <a href="https://github.com/tektoncd/pipeline">Tekton docs</a>.
 </td>
 </tr>
 </table>
@@ -1225,7 +1191,7 @@ more information about tasks and pipelines check <a href="https://github.com/tek
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-more information about pipelines on JX see <a href="https://jenkins-x.io/docs/v3/develop/pipeline-catalog/">JX Pipeline Docs</a>
+For more information about pipelines on JX, see <a href="https://jenkins-x.io/docs/v3/develop/pipeline-catalog/">JX Pipeline Docs</a>.
 </td>
 </tr>
 </table>
@@ -1235,16 +1201,16 @@ more information about pipelines on JX see <a href="https://jenkins-x.io/docs/v3
 <div class="sect3">
 <h4 id="_large-tests"><a class="anchor" href="#_large-tests"></a>Large Tests</h4>
 <div class="paragraph">
-<p>Currently, we have only Large Tests implementation based <a href="https://webdriver.io">WebdriverIO</a>.
-We added a few steps to <code>release</code> and <code>pullrequest</code> pipelines:</p>
+<p>Currently, we have only Large Tests implementation based on <a href="https://webdriver.io">WebdriverIO</a>.
+We have added a few steps to <code>release</code> and <code>pullrequest</code> pipelines:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Check if large test been executed on <strong>Staging</strong> before promote it on Production <strong>environment</strong></p>
+<p>Check if the large test has been executed on <strong>Staging</strong> before promote it to Production <strong>environment</strong>.</p>
 </li>
 <li>
-<p>Execute <strong>Large Tests</strong> after changes been applied on environment like Production.</p>
+<p>Execute <strong>Large Tests</strong> after changes applied on Production environment.</p>
 </li>
 </ul>
 </div>
@@ -1253,17 +1219,17 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 <div class="ulist">
 <ul>
 <li>
-<p>open <code>.lighthouse/large-test/triggers.yaml</code> and change: <code>always_run: false</code>, <code>optional: false</code> to <code>true</code>.</p>
+<p>Open <code>.lighthouse/large-test/triggers.yaml</code> and change: <code>always_run: false</code>, <code>optional: false</code> to <code>true</code>.</p>
 </li>
 <li>
-<p>open <code>.lighthouse/jenkins-x/release.yaml</code> and uncomment commented tasks: ` large-test-prepare-and-check` and <code>large-test-execute</code></p>
+<p>Open <code>.lighthouse/jenkins-x/release.yaml</code> and uncomment commented tasks: ` large-test-prepare-and-check` and <code>large-test-execute</code>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>change large test image name property: <code>LARGE_REPORTS_IMAGE</code></p>
+<p>Change large test image name property: <code>LARGE_REPORTS_IMAGE</code>.</p>
 </li>
 <li>
-<p>change your app URLs properties: <code>APP_URL_STAGING</code>, <code>APP_URL_PRODUCTION</code>, if you have more environments just add additional property like: <code>APP_URL_XXX</code></p>
+<p>Change your app URLs properties: <code>APP_URL_STAGING</code>, <code>APP_URL_PRODUCTION</code>. If you have more environments, just add additional property like: <code>APP_URL_XXX</code>.</p>
 </li>
 </ul>
 </div>
@@ -1274,26 +1240,26 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 <div class="sect4">
 <h5 id="_selenium"><a class="anchor" href="#_selenium"></a>Selenium</h5>
 <div class="paragraph">
-<p>For selenium hub config use:</p>
+<p>For selenium hub config, use:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>charts/dev/largetests/values.yaml.gotmpl</code></p>
+<p><code>charts/dev/largetests/values.yaml.gotmpl</code>.</p>
 </li>
 <li>
-<p><code>charts/dev/largetests/values.yaml</code></p>
+<p><code>charts/dev/largetests/values.yaml</code>.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>List of all configs: <a href="https://github.com/helm/charts/tree/master/stable/selenium#configuration" class="bare">https://github.com/helm/charts/tree/master/stable/selenium#configuration</a></p>
+<p>List of all configs: <a href="https://github.com/helm/charts/tree/master/stable/selenium#configuration" class="bare">https://github.com/helm/charts/tree/master/stable/selenium#configuration</a>.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_slack-notification"><a class="anchor" href="#_slack-notification"></a>Slack notification</h5>
+<h5 id="_slack-notifications"><a class="anchor" href="#_slack-notifications"></a>Slack notifications</h5>
 <div class="paragraph">
-<p>If you wanna change Large test execution message to slack, open and change: <code>charts/dev/secret/templates/slack-messages.yaml</code></p>
+<p>If you want to edit Large test execution message in slack, please open and add changes: <code>charts/dev/secret/templates/slack-messages.yaml</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1302,7 +1268,7 @@ We added a few steps to <code>release</code> and <code>pullrequest</code> pipeli
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You can use  next variables what can be populated/replaced: <code>$idea</code>, <code>${STATUS}</code>, <code>${REPORT_URL}</code>, <code>${DETAILS}</code> and <code>${GIT_SHA}</code>
+You can use following variables that can be populated/replaced: <code>$idea</code>, <code>${STATUS}</code>, <code>${REPORT_URL}</code>, <code>${DETAILS}</code> and <code>${GIT_SHA}</code>.
 </td>
 </tr>
 </table>
@@ -1314,14 +1280,14 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="ulist">
 <ul>
 <li>
-<p>For Keycloak configuration use: <code>charts/dev/keycloak/values.yaml.gotmpl</code> file in env. repository list of keycloak configs: <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration" class="bare">https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration</a></p>
+<p>For Keycloak configuration, use: <code>charts/dev/keycloak/values.yaml.gotmpl</code> file in env. repository list of keycloak configs: <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration" class="bare">https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration</a>.</p>
 </li>
 <li>
-<p>For default realm configuration in <a href="#runbook-vault">Vault</a> find <code>keycloak-relams/efault-relam.json</code> key and edit existed json.</p>
+<p>For default realm configuration in <a href="#runbook-vault">Vault</a>, find <code>keycloak-relams/efault-relam.json</code> key and edit existed json.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>if you need add more realms, add new realm secret into <code>charts/dev/keycloak/templates</code> and configure in <code>charts/dev/keycloak/values.yaml</code></p>
+<p>If you need to add more realms, add new realm secret into <code>charts/dev/keycloak/templates</code> and configure in <code>charts/dev/keycloak/values.yaml</code>.</p>
 </li>
 </ul>
 </div>
@@ -1332,22 +1298,22 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="sect3">
 <h4 id="_metrics"><a class="anchor" href="#_metrics"></a>Metrics</h4>
 <div class="paragraph">
-<p>Metrics chart <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">kube-prometheus-stack</a></p>
+<p>Metrics chart <a href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">kube-prometheus-stack</a>.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>For custom monitors and gradana dashboard use folder: <code>charts/dev/prometheusmonitors/templates</code></p>
+<p>For custom monitors and gradana dashboard, use the folder: <code>charts/dev/prometheusmonitors/templates</code>.</p>
 </li>
 <li>
-<p>For metrics stack configuration use</p>
+<p>For metrics stack configuration, use:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>charts/prometheus-community/kube-prometheus-stack/values.yaml.gotmpl</code></p>
+<p><code>charts/prometheus-community/kube-prometheus-stack/values.yaml.gotmpl</code>.</p>
 </li>
 <li>
-<p><code>charts/prometheus-community/kube-prometheus-stack/values.yaml</code></p>
+<p><code>charts/prometheus-community/kube-prometheus-stack/values.yaml</code>.</p>
 </li>
 </ul>
 </div>
@@ -1358,11 +1324,11 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="sect3">
 <h4 id="_alertmanager"><a class="anchor" href="#_alertmanager"></a>Alertmanager</h4>
 <div class="sect4">
-<h5 id="_configure-slack-notifications"><a class="anchor" href="#_configure-slack-notifications"></a>Configure Slack Notifications</h5>
+<h5 id="_configure-slack-notifications"><a class="anchor" href="#_configure-slack-notifications"></a>Configure Slack notifications</h5>
 <div class="ulist">
 <ul>
 <li>
-<p>In <a href="#runbook-vault">Vault</a> find <code>alertmanager.yaml</code> secret and replace <code>${SLACK_HOOK_URL}</code> with your hook URL. See example: <code>charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml</code></p>
+<p>In <a href="#runbook-vault">Vault</a> find <code>alertmanager.yaml</code> secret and replace <code>${SLACK_HOOK_URL}</code> with your hook URL. Example: <code>charts/prometheus-community/kube-prometheus-stack/secret-schema.yaml</code>.</p>
 </li>
 </ul>
 </div>
@@ -1375,7 +1341,7 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="ulist">
 <ul>
 <li>
-<p>for the cluster delete <code>cd</code> to your infra. repository and execute <code>terraform destroy</code></p>
+<p>For the cluster, delete <code>cd</code> from your infra repository and execute <code>terraform destroy</code>.</p>
 </li>
 </ul>
 </div>
@@ -1385,10 +1351,10 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="ulist">
 <ul>
 <li>
-<p>For port forward Vault type: <code>jx secret vault portforward</code> - after that you can rich Vault at <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
+<p>For port forward Vault type: <code>jx secret vault portforward</code>. After that you can access Vault at: <a href="https://localhost:8200" class="bare">https://localhost:8200</a>.</p>
 </li>
 <li>
-<p>Vault root token can be found in secret: <code>vault-unseal-keys</code>, key: <code>vault-root</code></p>
+<p>Vault root token can be found in secret: <code>vault-unseal-keys</code>, key: <code>vault-root</code>.</p>
 </li>
 </ul>
 </div>
@@ -1397,7 +1363,7 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="ulist">
 <ul>
 <li>
-<p>keycloak url: <code>kubectrl get ingress -n keycloak</code></p>
+<p>Keycloak url: <code>kubectrl get ingress -n keycloak</code>.</p>
 </li>
 </ul>
 </div>
@@ -1413,54 +1379,49 @@ You can use  next variables what can be populated/replaced: <code>$idea</code>, 
 <div class="sect2">
 <h3 id="_trunk-based-development-branching"><a class="anchor" href="#_trunk-based-development-branching"></a>Trunk Based Development (Branching)</h3>
 <div class="paragraph">
-<p>A source-control branching model, where developers collaborate on code in a single branch called ‘trunk’,
-resist any pressure to create other long-lived development branches by employing documented techniques.
-They, therefore, avoid merge hell, do not break the build, and live happily ever after.
-In some cases, they create short-lived feature branches, but it is not welcome.</p>
-</div>
-<div class="paragraph">
-<p>Let’s have a look at the trunk-based development workflow.</p>
+<p>Trunk-based development (TBD) is a source-control branching model for software development where developers merge every new feature, bug fix, or other code changes to one central branch in the version control system. This branch is called “trunk”. TBD enables continuous integration – and, by extension, continuous delivery – by creating an environment where commits to trunk naturally occur multiple times daily for each programmer. This makes it easy to satisfy the “everyone on the development team commits to trunk at least every 24 hours” requirement of continuous integration and lays the foundation for the codebase to be releasable at any time, as it is necessary for continuous delivery and continuous deployment.
+Let’s have a look at the trunk-based development workflow.</p>
 </div>
 <iframe style="border:none" width="100%" height="900px" src="https://whimsical.com/embed/95zX1zeN2DCPYAo4an3xXz"></iframe>
 <div class="paragraph">
-<p>Typically we use  <strong>Scaled Trunk-Based Development</strong></p>
+<p>Typically we use  <strong>Scaled Trunk-Based Development</strong>.</p>
 </div>
 <div class="sect3">
 <h4 id="_best-practices"><a class="anchor" href="#_best-practices"></a>Best Practices</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Only fast forward merges to the trunk.</p>
+<p>We use only fast-forward merges to trunk.</p>
 </li>
 <li>
-<p>Disallow pushing to the trunk.</p>
+<p>We disallow pushing to trunk.</p>
 </li>
 <li>
-<p>Machine-readable meaning to commit messages.</p>
+<p>We write machine-readable commit messages.</p>
 </li>
 <li>
-<p><em>Merge squash your multiple changes in your short life branches.</em></p>
+<p><em>We merge squash multiple changes in short life branches.</em></p>
 </li>
 <li>
-<p><em>Rebasing master against your short-lived branch to keep it up to date is best, do NOT merge master back to your short-lived branch and then back again to trunk, effectively creating multiple merge comments and confusing history.</em></p>
+<p><em>The best practice is to rebase master against short-lived branch to keep it up to date. We do NOT merge master back to short-lived branch and then again to trunk, to avoid multiple merge comments and confusing history.</em></p>
 </li>
 <li>
 <p>Feature branches must be short-lived.</p>
 </li>
 <li>
-<p>If you are working from a ticketing system, make sure to first mention the ticket number in your commit, and dynamically link them if possible in your repo tool.</p>
+<p>We work with a ticketing system, and add the ticket number to each commit.</p>
 </li>
 <li>
-<p>Keep your commit messages as concise as possible, insofar as they make sense.</p>
+<p>We keep commit messages as concise as possible.</p>
 </li>
 <li>
-<p><em>You shouldn&#8217;t do hotfix in this day and age if you can avoid it, it&#8217;s best to fix forward and not go back, if there has been another feature released since then that you don&#8217;t want to be included, then disable it with feature flags. Remember, you want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your life and your repo.</em></p>
+<p><em>We avoid hotfixes. Fixing forward is better than rolling back. If we don&#8217;t want to include another feature that has been released, we disable it with feature flags. We want to keep the flow of updates and releases as short and constant as possible, the hotfix will only complicate your repo.</em></p>
 </li>
 <li>
-<p>Try and understand git commands and internals first before using graphic tools like git "Kraken". There is nothing wrong with them, they can be very helpful, especially when looking at history graphs. However, they are not a replacement for your understanding of how git works.</p>
+<p>We have to understand git commands and internals before using graphic tools like git "Kraken". They can be very helpful, especially when looking at history graphs. However, we still need to know certain basic things like the difference between revert and reset.</p>
 </li>
 <li>
-<p>Don&#8217;t ever commit secrets of any king to the repository  -<strong>EVER</strong>.</p>
+<p>We never commit secrets of any kind to the repository  -<strong>EVER</strong>.</p>
 </li>
 </ul>
 </div>
@@ -1471,7 +1432,7 @@ In some cases, they create short-lived feature branches, but it is not welcome.<
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-More info you can get <a href="https://trunkbaseddevelopment.com/">here</a> and <a href="https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f">here</a>
+For more information, see <a href="https://trunkbaseddevelopment.com/">here</a> and <a href="https://medium.com/factualopinions/git-to-know-this-before-you-do-trunk-based-development-tbd-476bc8a7c22f">here</a>
 </td>
 </tr>
 </table>
@@ -1481,11 +1442,10 @@ More info you can get <a href="https://trunkbaseddevelopment.com/">here</a> and 
 <div class="sect2">
 <h3 id="_quality-gateway"><a class="anchor" href="#_quality-gateway"></a>Quality Gateway</h3>
 <div class="paragraph">
-<p>The <strong>Quality Gateway</strong> is an organizational\infrastructure point through which all product code must pass.
-The intention of having a gateway into the SDLC is to trap incorrect code, bugs, as early as possible,
-thereby preventing incorrect code from passing from the local codebase to a shared codebase.
-To get through the quality gateway code must satisfy several <a href="#tests">Test (Test case)</a>.
-The tests are devised to make sure that the requirement is an accurate statement of the business needs.</p>
+<p>The <strong>Quality Gateway</strong> is an organizational\infrastructure point for testing code.
+The purpose of a quality gateway is to trap incorrect code and bugs as early as possible to prevent getting the incorrect code from the local codebase into a shared codebase.
+To get through the quality gateway, the code must satisfy several <a href="#tests">Test (Test case)</a>.
+The tests are devised to make sure that each requirement meets business needs.</p>
 </div>
 <div class="sect3">
 <h4 id="_quality-gates"><a class="anchor" href="#_quality-gates"></a>Quality Gates</h4>
@@ -1513,7 +1473,7 @@ The tests are devised to make sure that the requirement is an accurate statement
 <p>Static analysis <code>remote</code>.</p>
 </li>
 <li>
-<p><a href="#medium-test">Medium Tests</a> <code>remote</code>. <em>Optional if acceptable by 10 minutes rule</em></p>
+<p><a href="#medium-test">Medium Tests</a> <code>remote</code>. <em>Optional if acceptable by 10 minutes rule</em>.</p>
 </li>
 <li>
 <p><a href="#large-test">Large Tests</a> <code>remote</code>.</p>
@@ -1525,8 +1485,8 @@ The tests are devised to make sure that the requirement is an accurate statement
 <div class="sect2">
 <h3 id="tests"><a class="anchor" href="#tests"></a>Test (Test case)</h3>
 <div class="paragraph">
-<p>The <strong>test case</strong> is a specification of the inputs, execution conditions, testing procedure, and expected results that
-define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular
+<p>The <strong>test case</strong> is a specification of the inputs, execution conditions, testing procedures, and expected results that
+define a single test to be executed to achieve a particular software testing objective. For example, to exercise a particular
 program path or to verify compliance with a specific requirement. Test cases underlie testing that is methodical rather than haphazard.
 A battery of test cases can be built to produce the desired coverage of the software being tested.
 Formally defined test cases allow the same tests to be run repeatedly against successive versions of the software,
@@ -1546,7 +1506,7 @@ According to the book <a href="https://www.amazon.com/Google-Tests-Software-Jame
 <p><a href="#medium-test">Medium Tests</a> - covers multiple and interacting units of code in a faked environment. <code>integration</code>, <code>capability</code> tests</p>
 </li>
 <li>
-<p><a href="#large-test">Large Tests</a> - covers any number of units of code in the real integrated environment close to production one with real and not faked resources.
+<p><a href="#large-test">Large Tests</a> - covers any number of units of code in the real integrated environment close to production environment with real and not faked resources.
 <code>E2E</code>, <code>Smoke</code>, <code>Sanity</code>, <code>Functional</code>, <code>NFR</code> tests</p>
 </li>
 </ul>
@@ -1562,17 +1522,17 @@ The focus is on typical functional issues, data corruption, error conditions, an
 <p><strong>Small Tests</strong> are <strong>Unit Tests</strong> in testing terminology.</p>
 </div>
 <div class="paragraph">
-<p>They are most likely written by an <a href="#roles-swe">SWE</a>, less often by a <a href="#roles-swe">SWE</a>,
+<p>They are most likely written by an <a href="#roles-swe">SWE</a>, less often by a <a href="#roles-set">SETs</a>,
 and hardly ever by <a href="#roles-tes">TEs</a>. Small tests usually require mocks and faked environments to run.
 (Mocks and fakes are stubs—substitutes for actual functions—that act as placeholders for dependencies that might not exist,
 are too buggy to be reliable, or too difficult to emulate error conditions.) [TEs](<a href="https://github.com/vitech-team/SDLC/wiki/Glossary" class="bare">https://github.com/vitech-team/SDLC/wiki/Glossary</a>)
 rarely write small tests but might run them when they are trying to diagnose a particular failure.</p>
 </div>
 <div class="paragraph">
-<p>The question a small test attempts to answer is, <strong>"Does this code do what it is supposed to do?"</strong>.</p>
+<p>Small tests try to answer the following question: <strong>"Does this code do what it is supposed to do?"</strong></p>
 </div>
 <div class="paragraph">
-<p><em>Small Tests are to be running during <strong>test</strong> build phase in <strong>Continuous Integration</strong> pipeline.</em></p>
+<p><em>Running of small tests is usually required during <strong>test</strong> build phase in <strong>Continuous Integration</strong> pipeline.</em></p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -1590,29 +1550,27 @@ A test that doesn&#8217;t require dependency on external resources (file system,
 <div class="sect3">
 <h4 id="medium-test"><a class="anchor" href="#medium-test"></a>Medium Tests</h4>
 <div class="paragraph">
-<p><strong>Medium tests</strong> are regularly automated and involve a pair or more interacting features.
-<em>The focus is on testing the interaction between features</em> that call each other or interact directly, usually,
-we call these nearest neighbor functions. <a href="#roles-set">SETs</a> support the development of these tests early in the product cycle as individual
-features are completed and <a href="#roles-swe">SWEs</a> are heavily involved in writing, debugging, and maintaining the actual tests.
+<p><strong>Medium tests</strong> are regularly automated and involve two or more interacting features.
+<em>The focus is on testing the directly interaction between features</em>, so-called nearest neighbor functions. <a href="#roles-set">SETs</a> supports the development of medium tests as completed individual features early in the product cycle and <a href="#roles-swe">SWEs</a> is heavily involved in writing, debugging, and maintaining the actual tests.
 If a medium test fails or breaks, the developer takes care of it autonomously.</p>
 </div>
 <div class="paragraph">
 <p>In a majority of cases <a href="#medium-test">Medium Tests</a> reflect <strong>Integration Tests</strong> in testing terminology.</p>
 </div>
 <div class="paragraph">
-<p>Later in the development cycle, <a href="#roles-tes">TEs</a> can execute medium tests either manually (in the event the test is difficult or prohibitively costly to automate) or with automation.</p>
+<p>Later in the development cycle, <a href="#roles-tes">TEs</a> can execute medium tests either manually (if the test is difficult to automate) or with automation.</p>
 </div>
 <div class="paragraph">
-<p>The question a medium test answer is, <strong>"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"</strong>.</p>
+<p>Medium tests try to answer the following question: <strong>"Does a set of near neighbor functions interoperate with each other the way they are supposed to?"</strong></p>
 </div>
 <div class="paragraph">
-<p>For a specific function under test, the neighbor function could be: <strong>another component, module, network interface, file system, database, message broker, storage, etc</strong>.
+<p>The following neighbor functions can be used for a specific function under test: <strong>another component, module, network interface, file system, database, message broker, storage, etc</strong>.
 In the majority of cases, medium tests rely on an external process running on the same host/VM/container.
 A good example of an external process is a docker service running on the same host/VM with a test-runner process, which can be utilized by <a href="https://www.testcontainers.org/">testcontainers</a> framework.</p>
 </div>
 <div class="paragraph">
 <p><em>Medium Tests must be separated from Small Tests in a project structure.
-They are to be running during <strong>integration-test</strong> build phase in <strong>Continuous Integration</strong> pipeline.
+Running of medium tests is usually required during <strong>integration-test</strong> build phase in <strong>Continuous Integration</strong> pipeline.
 Test Coverage tools should have separate reports for Medium Tests.</em></p>
 </div>
 <div class="paragraph">
@@ -1622,7 +1580,7 @@ Test Coverage tools should have separate reports for Medium Tests.</em></p>
 <div class="sect3">
 <h4 id="large-test"><a class="anchor" href="#large-test"></a>Large Tests</h4>
 <div class="paragraph">
-<p><strong>Large tests</strong> are running over component(s) deployed to the environment by the same <strong>Continuous Deployment</strong> pipeline that deploys to production.</p>
+<p><strong>Large tests</strong> are usually running over component(s) deployed to the environment by the same <strong>Continuous Deployment</strong> pipeline that deploys to production.</p>
 </div>
 <div class="paragraph">
 <p><strong>Large Tests</strong> can be reflected by the following test suites:</p>
@@ -1630,46 +1588,46 @@ Test Coverage tools should have separate reports for Medium Tests.</em></p>
 <div class="ulist">
 <ul>
 <li>
-<p>End-To-End</p>
+<p>End-To-End.</p>
 </li>
 <li>
-<p>Functional</p>
+<p>Functional.</p>
 </li>
 <li>
-<p>Load/Stress/Performance (NFR gates)</p>
+<p>Load/Stress/Performance (NFR gates).</p>
 </li>
 <li>
-<p>Security</p>
+<p>Security.</p>
 </li>
 <li>
-<p>Smoke/Sanity</p>
+<p>Smoke/Sanity.</p>
 </li>
 <li>
-<p>any other ones which are running over deployed components</p>
+<p>Any other tests which are running over deployed components.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The question a large test attempts to answer is, <strong>“Does the product operate the way a user would expect (from functional and non-functional requirements perspective) and produce the desired results?”</strong>.</p>
+<p>Large tests try to answer the following question: <strong>“Does the product operate the way a user expects (from functional and non-functional requirements perspective) and produce the desired results?”</strong></p>
 </div>
 <div class="paragraph">
-<p>Large Tests tend to be much slower than medium tests, they rely on a full PROD-like deployment up and running alongside real (not stubbed/mocked) infrastructure services.</p>
+<p>Large Tests need more time to run than medium tests, they rely on a full PROD-like deployment alongside real (not stubbed/mocked) infrastructure services.</p>
 </div>
 <div class="paragraph">
-<p>Possible phases/places where <strong>Large Tests</strong> can be running :</p>
+<p>Running of <strong>Large Tests</strong> can be required in the following phases/places:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Pull Requests checks (in case if they are relatively fast and overall PR time doesn&#8217;t go beyond ~15mins)</p>
+<p>Pull Requests checks (if they are fast enough and overall PR time doesn&#8217;t go beyond ~15mins).</p>
 </li>
 <li>
 <p>Functional Test Suite in <strong>Continuous Deployment</strong> pipeline (after-deployment step).
-If their run takes too long&#8201;&#8212;&#8201;it&#8217;s expected to have separate <strong>Smoke/Sanity test suite</strong> extracted for that purpose and Functional ones running by separate pipeline.</p>
+If their run takes too long&#8201;&#8212;&#8201;it&#8217;s expected to have separate <strong>Smoke/Sanity test suite</strong> extracted for that purpose, and running of Functional tests can be executed by separate pipeline.</p>
 </li>
 <li>
 <p>NFRs gate in <strong>Continuous Deployment</strong> pipeline. It&#8217;s expected that desired/existed application benchmarks have
-been already collected by performance tests and put as an NFR&#8217;s thresholds/gates. Metrics collected during NFR gate tests are to be trended in time.</p>
+been already collected by performance tests and put as an NFR&#8217;s thresholds/gates. Metrics collected during NFR gate tests have to be trended in time.</p>
 </li>
 </ul>
 </div>
@@ -1686,10 +1644,10 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <div class="ulist">
 <ul>
 <li>
-<p><strong>MAJOR</strong> - version when you make incompatible API changes,</p>
+<p><strong>MAJOR</strong> - version when you make incompatible API changes.</p>
 </li>
 <li>
-<p><strong>MINOR</strong> - version when you add functionality in a backward compatible manner, and</p>
+<p><strong>MINOR</strong> - version when you add functionality in a backward compatible manner.</p>
 </li>
 <li>
 <p><strong>PATCH</strong> - version when you make backward compatible bug fixes.</p>
@@ -1708,7 +1666,7 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 </div>
 </div>
 <div class="paragraph">
-<p>Version change should be driven by commit messages like described in <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a></p>
+<p>Version change should be driven by commit messages. See examples: <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1719,7 +1677,7 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <p><a id="roles-swe"></a><strong>SWE</strong> -Software Engineer.</p>
 </li>
 <li>
-<p><a id="roles-set"></a><strong>SET</strong> -Software engineer in Testing. This person is responsible for the complete design of the test cases and to maintain them.</p>
+<p><a id="roles-set"></a><strong>SET</strong> -Software engineer in Testing is responsible for the complete design and maintenance of the test cases.</p>
 </li>
 <li>
 <p><a id="roles-tes"></a><strong>TEs</strong> -Test engineers.</p>
@@ -1733,14 +1691,14 @@ been already collected by performance tests and put as an NFR&#8217;s thresholds
 <h2 id="_other"><a class="anchor" href="#_other"></a>Other</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_connect-to-existing-cluster-jx"><a class="anchor" href="#_connect-to-existing-cluster-jx"></a>Connect to existing cluster / JX</h3>
+<h3 id="_connect-to-the-existing-cluster-jx"><a class="anchor" href="#_connect-to-the-existing-cluster-jx"></a>Connect to the existing cluster / JX.</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>download <a href="https://github.com/jenkins-x/jx-cli/releases">JX CLI/client</a> which is defined by env repository</p>
+<p>download <a href="https://github.com/jenkins-x/jx-cli/releases">JX CLI/client</a> which is defined by env repository.</p>
 </li>
 <li>
-<p><a href="https://cloud.google.com/sdk/gcloud/reference/auth/login">login</a> into GC cloud</p>
+<p><a href="https://cloud.google.com/sdk/gcloud/reference/auth/login">login</a> into GC cloud.</p>
 </li>
 </ul>
 </div>
@@ -1753,7 +1711,7 @@ gcloud auth application-default login</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>connect to cluster</p>
+<p>connect to cluster.</p>
 </li>
 </ul>
 </div>
@@ -1768,7 +1726,7 @@ gcloud container clusters get-credentials <span class="s2">"</span><span class="
 <div class="ulist">
 <ul>
 <li>
-<p>switch to <code>jx</code> namespace</p>
+<p>switch to <code>jx</code> namespace.</p>
 </li>
 </ul>
 </div>
@@ -1781,7 +1739,7 @@ gcloud container clusters get-credentials <span class="s2">"</span><span class="
 <div class="sect2">
 <h3 id="_jx"><a class="anchor" href="#_jx"></a>JX</h3>
 <div class="sect3">
-<h4 id="_where-git-creds-stored"><a class="anchor" href="#_where-git-creds-stored"></a>Where git creds stored</h4>
+<h4 id="_credential-storage-git"><a class="anchor" href="#_credential-storage-git"></a>Credential Storage - Git</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">~/git/credentials</code></pre>
@@ -1792,7 +1750,7 @@ gcloud container clusters get-credentials <span class="s2">"</span><span class="
 <div class="sect2">
 <h3 id="_gradle"><a class="anchor" href="#_gradle"></a>Gradle</h3>
 <div class="paragraph">
-<p>To use artifacts mirror locally next properties into <code>.gradle.properties</code> or into global gradle properties <code>~/.gradle/.gradle.properties</code>:</p>
+<p>To use the artifacts mirror locally, set following properties in <code>.gradle.properties</code> or in global gradle properties <code>~/.gradle/.gradle.properties</code>:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1814,7 +1772,7 @@ gcloud container clusters get-credentials <span class="s2">"</span><span class="
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-current properties applicable for projects which is generated by SDLC quickstart.
+Current properties are applicable for projects generated by SDLC quickstart.
 </td>
 </tr>
 </table>
@@ -1823,7 +1781,7 @@ current properties applicable for projects which is generated by SDLC quickstart
 <div class="sect2">
 <h3 id="_github-project"><a class="anchor" href="#_github-project"></a>GitHub project</h3>
 <div class="paragraph">
-<p><a href="https://github.com/vitech-team/SDLC/projects" class="bare">https://github.com/vitech-team/SDLC/projects</a></p>
+<p><a href="https://github.com/vitech-team/SDLC/projects" class="bare">https://github.com/vitech-team/SDLC/projects</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1831,10 +1789,10 @@ current properties applicable for projects which is generated by SDLC quickstart
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee" class="bare">https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee</a></p>
+<p><a href="https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee" class="bare">https://lucid.app/lucidchart/invitations/accept/c7c8be31-1804-4a2c-8db6-1300d64974ee</a>.</p>
 </li>
 <li>
-<p><a href="https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM" class="bare">https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM</a></p>
+<p><a href="https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM" class="bare">https://whimsical.com/sdlc-9iJvu6pNAXzUQBYYR61qAM</a>.</p>
 </li>
 </ul>
 </div>
@@ -1844,26 +1802,26 @@ current properties applicable for projects which is generated by SDLC quickstart
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/vitech-team/mood-feed-frontend">Angular Frontend app example</a></p>
+<p><a href="https://github.com/vitech-team/mood-feed-frontend">Angular Frontend app example</a>.</p>
 </li>
 <li>
-<p><a href="https://github.com/vitech-team/sdlc-react">React Frontend app example</a></p>
+<p><a href="https://github.com/vitech-team/sdlc-react">React Frontend app example</a>.</p>
 </li>
 <li>
-<p><a href="https://github.com/vitech-team/mood-feed-backend">Backend example</a></p>
+<p><a href="https://github.com/vitech-team/mood-feed-backend">Backend example</a>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>MySQL</p>
+<p>MySQL.</p>
 </li>
 <li>
-<p>Spring Boot</p>
+<p>Spring Boot.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a></p>
+<p><a href="https://github.com/vitech-team/mood-feed-test">Large test example</a>.</p>
 </li>
 </ul>
 </div>
@@ -1871,7 +1829,7 @@ current properties applicable for projects which is generated by SDLC quickstart
 <div class="sect2">
 <h3 id="_local-git-credentials"><a class="anchor" href="#_local-git-credentials"></a>Local Git credentials</h3>
 <div class="paragraph">
-<p>if you need change <strong>local</strong> git user and token do it in the file: <code>~/git/credentials</code></p>
+<p>If you need to change <strong>local</strong> git user and token, do it in the file: <code>~/git/credentials</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1879,7 +1837,7 @@ current properties applicable for projects which is generated by SDLC quickstart
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://k8slens.dev/" class="bare">https://k8slens.dev/</a></p>
+<p><a href="https://k8slens.dev/" class="bare">https://k8slens.dev/</a>.</p>
 </li>
 </ul>
 </div>

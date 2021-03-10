@@ -33,7 +33,7 @@ NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Conti
 * build - including <<#small-test>> & <<#medium-test>>
 * dependencies check - https://owasp.org/www-project-dependency-check/[OWASP Dependency-Check]
 * container build - using https://paketo.io[Paketo Buildpacks] or https://github.com/GoogleContainerTools/kaniko[Kaniko]
-* container scan - https://github.com/aquasecurity/trivy[Trivy] & https://github.com/goodwithtech/dockle[Dockle]
+* container scan - (https://github.com/aquasecurity/trivy[Trivy] & https://github.com/goodwithtech/dockle[Dockle]) or Snyk
 * static code analyse - https://www.sonarqube.org[sonar]
 * preview environment creation - JX (preview folder in imported project)
 
