@@ -24,10 +24,14 @@ NOTE: Jenkins X aims to automate and accelerate Continuous Integration and Conti
 
 === CI/CD flow
 ++++
-<iframe allowfullscreen frameborder="0" style="width: 100%; height: 750px;" src="https://lucid.app/documents/embeddedchart/88013d3c-9451-45de-b97c-87e3bf8dff8a" id="ZddTO1PVGjTd"></iframe>
+<iframe style="border:none"  width="100%" height="650" src="https://whimsical.com/embed/CFHzBb1FP2axfwRDjT77to"></iframe>
 ++++
 
 ==== Pull Request flow
+++++
+<iframe style="border:none" width="100%" height="550" src="https://whimsical.com/embed/JsEfGvFL9KG25q5Axqx6mr"></iframe>
+++++
+
 * https://www.conventionalcommits.org/en/v1.0.0/[conventional commits] scan - https://github.com/aevea/commitsar[Commitsar]
 * scan for secrets - https://github.com/zricethezav/gitleaks[Gitleaks]
 * build - including <<#small-test>> & <<#medium-test>>
