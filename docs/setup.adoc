@@ -6,9 +6,12 @@
 === Prerequisites
 * https://github.com/join[Create a git user for a bot] (different from your own personal user account) and generate a https://github.com/settings/tokens/new?scopes=repo,read:user,read:org,user:email,write:repo_hook,delete_repo,admin:repo_hook[personal access token], which will be used by Jenkins X to interact with git repositories.
 * https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform[Terraform CLI] (version `== 13.5`).
-* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI].
+* https://github.com/jenkins-x/jx-cli/releases[Jenkins X CLI] (version `== 3.1`).
+** Create file with GitHub credentials for JX: create file `~/git/credentials` with following content: `https://<username>:<access_token>@github.com`
+* https://v1-20.docs.kubernetes.io/docs/tasks/tools/[kubectl] (version `== 1.20`).
+* https://helm.sh/docs/intro/install/[helm] (version `== 3`).
 * https://cloud.google.com/sdk/docs/quickstart#linux[Google Cloud SDK].
-** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API.] (Implement only the first item of the provided guide).
+** https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster[Ensure that you have enabled the IAM Service Account Credentials API for the project.] (Implement only the first item of the provided guide).
 ** Login `gcloud auth application-default login`.
 ** Make sure, the user has *full access* to GCP resources.
 * Generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token].
@@ -37,7 +40,7 @@ include::{scriptsdir}/install.sh[]
 <2> Environment repository name.
 <3> Infra. and env. repo URLs.
 <4> GitHub username and token. *User should have settings permission to all repositories*.
-<5> Cluster name.
+<5> Cluster name to be created.
 <6> GCP project id.
 <7> Cluster zone: https://cloud.google.com/compute/docs/regions-zones#available.
 <8> Default node count.

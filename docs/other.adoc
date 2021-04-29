@@ -16,14 +16,7 @@ gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${ZONE}" --p
 ```
 * switch to `jx` namespace.
 ```shell
-jx nx jx
-```
-
-=== JX
-==== Credential Storage - Git
-
-```shell
-~/git/credentials
+jx ns jx
 ```
 
 === Gradle
