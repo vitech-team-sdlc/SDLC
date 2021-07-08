@@ -87,6 +87,7 @@ sleep 3
 jx secret verify
 jx secret populate
 jx secret edit -f sonar
+jx secret edit -f oauth2-proxy
 
 echo -e "${green}Killing proxy process...${nrm}"
 kill %1

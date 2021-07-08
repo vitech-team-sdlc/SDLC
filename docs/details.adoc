@@ -1,4 +1,25 @@
 === Customization
+==== Keycloak
+If you need some auth server, in our case it's https://www.keycloak.org[Keycloak] execute following commands inside *environment repository folder*.
+
+* add Keycloak chart
+```shell
+jx gitops helmfile add --chart=vitech-sdlc/keycloak --namespace=keycloak --repository=https://vitech-team.github.io/sdlc-charts
+```
+* resolve main helmfile
+```shell
+jx gitops helmfile resolve
+```
+* create new branch and create PR
+* wait for green pipelines
+* merge PR
+
+==== Oauth access for Pipelines dashboard
+Default setup is configured for *GitHub*, if you need change your auth provider check: https://jenkins-x.io/v3/admin/setup/ingress/oauth/
+
+==== Domain & TLS configuration
+https://jenkins-x.io/v3/admin/setup/ingress/tls_dns/
+
 ==== Pipelines
 ===== Pipelines catalog and pack
 All shared tasks and packs are stored in: https://github.com/vitech-team/tekton-pipelines-catalog.

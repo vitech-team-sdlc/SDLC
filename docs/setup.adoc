@@ -17,6 +17,7 @@
 * Generate Sonar cloud https://docs.sonarqube.org/latest/user-guide/user-token/[token].
 * Generate Slack https://api.slack.com/messaging/webhooks#getting_started[Incoming Webhooks] `optional`.
 * Generate Snyk https://snyk.io/blog/service-accounts/[token]  `if you have license` `optional`.
+* Create GitHub Oauth application for Pipeline Visualizer: https://jenkins-x.io/v3/admin/setup/ingress/oauth/#prerequisites
 
 WARNING: After a successful login into GCP, the user should have full access to cluster resources including the ability to create IAM roles.
 
