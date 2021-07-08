@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 export INFRA_REPO_NAME="demo-infra" # <1>
 export ENV_REPO_NAME="demo-environment" # <2>
 
@@ -19,14 +21,30 @@ export FORCE_DESTROY="false" # <9>
 export green="\e[32m"
 export nrm="\e[39m"
 
-git clone $INFRA_GIT
-git clone $ENV_GIT
+if [ ! -d $INFRA_REPO_NAME ]; then
+  git clone $INFRA_GIT
+fi
+if [ ! -d $ENV_REPO_NAME ]; then
+  git clone $ENV_GIT
+fi
 
-cd $INFRA_REPO_NAME || exit
 
-rm values.auto.tfvars
+cd "$ENV_REPO_NAME" || exit
+git pull
+
+jx gitops update
+
+git add .
+
+git commit -m "chore: gitops update from upstream"
+
+git push
+
+cd "../$INFRA_REPO_NAME" || exit
+
+rm -f values.auto.tfvars
 # <10>
-cat <<EOF >>values.auto.tfvars
+cat <<EOF >values.auto.tfvars
 resource_labels = { "provider" : "jx" }
 jx_git_url = "${ENV_GIT}"
 gcp_project = "${GCP_PROJECT}"
@@ -36,8 +54,7 @@ force_destroy = "${FORCE_DESTROY}"
 min_node_count = "${MIN_NODE_COUNT}"
 EOF
 
-git commit -a -m "fix: configure cluster repository and project"
-git push
+git commit -a -m "fix: configure cluster repository and project" && git push || echo "Nothing to push"
 
 terraform init
 terraform apply

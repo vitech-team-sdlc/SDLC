@@ -693,7 +693,6 @@ pre.rouge {
 <li><a href="#_other">Other</a>
 <ul class="sectlevel2">
 <li><a href="#_connect-to-the-existing-cluster-jx">Connect to the existing cluster / JX.</a></li>
-<li><a href="#_jx">JX</a></li>
 <li><a href="#_gradle">Gradle</a></li>
 <li><a href="#_github-project">GitHub project</a></li>
 <li><a href="#_diagrams">Diagrams</a></li>
@@ -835,14 +834,27 @@ Jenkins X aims to automate and accelerate Continuous Integration and Continuous 
 <p><a href="https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform">Terraform CLI</a> (version <code>== 13.5</code>).</p>
 </li>
 <li>
-<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a>.</p>
+<p><a href="https://github.com/jenkins-x/jx-cli/releases">Jenkins X CLI</a> (version <code>== 3.1</code>).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create file with GitHub credentials for JX: create file <code>~/git/credentials</code> with following content: <code><a href="https://&lt;username&gt;:&lt;access_token&gt;@github.com" class="bare">https://&lt;username&gt;:&lt;access_token&gt;@github.com</a></code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://v1-20.docs.kubernetes.io/docs/tasks/tools/">kubectl</a> (version <code>== 1.20</code>).</p>
+</li>
+<li>
+<p><a href="https://helm.sh/docs/intro/install/">helm</a> (version <code>== 3</code>).</p>
 </li>
 <li>
 <p><a href="https://cloud.google.com/sdk/docs/quickstart#linux">Google Cloud SDK</a>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Ensure that you have enabled the IAM Service Account Credentials API.</a> (Implement only the first item of the provided guide).</p>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#enable_on_cluster">Ensure that you have enabled the IAM Service Account Credentials API for the project.</a> (Implement only the first item of the provided guide).</p>
 </li>
 <li>
 <p>Login <code>gcloud auth application-default login</code>.</p>
@@ -910,6 +922,8 @@ Do not clone the created repository on your local machine, it will be done autom
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell"><span class="c">#!/usr/bin/env bash</span>
 
+<span class="nb">set</span> <span class="nt">-e</span>
+
 <span class="nb">export </span><span class="nv">INFRA_REPO_NAME</span><span class="o">=</span><span class="s2">"demo-infra"</span> <i class="conum" data-value="1"></i><b>(1)</b>
 <span class="nb">export </span><span class="nv">ENV_REPO_NAME</span><span class="o">=</span><span class="s2">"demo-environment"</span> <i class="conum" data-value="2"></i><b>(2)</b>
 
@@ -929,14 +943,30 @@ Do not clone the created repository on your local machine, it will be done autom
 <span class="nb">export </span><span class="nv">green</span><span class="o">=</span><span class="s2">"</span><span class="se">\e</span><span class="s2">[32m"</span>
 <span class="nb">export </span><span class="nv">nrm</span><span class="o">=</span><span class="s2">"</span><span class="se">\e</span><span class="s2">[39m"</span>
 
-git clone <span class="nv">$INFRA_GIT</span>
-git clone <span class="nv">$ENV_GIT</span>
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="nv">$INFRA_REPO_NAME</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span>git clone <span class="nv">$INFRA_GIT</span>
+<span class="k">fi
+if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="nv">$ENV_REPO_NAME</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span>git clone <span class="nv">$ENV_GIT</span>
+<span class="k">fi
 
-<span class="nb">cd</span> <span class="nv">$INFRA_REPO_NAME</span> <span class="o">||</span> <span class="nb">exit
 
-rm </span>values.auto.tfvars
+</span><span class="nb">cd</span> <span class="s2">"</span><span class="nv">$ENV_REPO_NAME</span><span class="s2">"</span> <span class="o">||</span> <span class="nb">exit
+</span>git pull
+
+jx gitops update
+
+git add <span class="nb">.</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"chore: gitops update from upstream"</span>
+
+git push
+
+<span class="nb">cd</span> <span class="s2">"../</span><span class="nv">$INFRA_REPO_NAME</span><span class="s2">"</span> <span class="o">||</span> <span class="nb">exit
+
+rm</span> <span class="nt">-f</span> values.auto.tfvars
 <i class="conum" data-value="10"></i><b>(10)</b>
-<span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> &gt;&gt;values.auto.tfvars
+<span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> &gt;values.auto.tfvars
 resource_labels = { "provider" : "jx" }
 jx_git_url = "</span><span class="k">${</span><span class="nv">ENV_GIT</span><span class="k">}</span><span class="sh">"
 gcp_project = "</span><span class="k">${</span><span class="nv">GCP_PROJECT</span><span class="k">}</span><span class="sh">"
@@ -946,8 +976,7 @@ force_destroy = "</span><span class="k">${</span><span class="nv">FORCE_DESTROY<
 min_node_count = "</span><span class="k">${</span><span class="nv">MIN_NODE_COUNT</span><span class="k">}</span><span class="sh">"
 </span><span class="no">EOF
 
-</span>git commit <span class="nt">-a</span> <span class="nt">-m</span> <span class="s2">"fix: configure cluster repository and project"</span>
-git push
+</span>git commit <span class="nt">-a</span> <span class="nt">-m</span> <span class="s2">"fix: configure cluster repository and project"</span> <span class="o">&amp;&amp;</span> git push <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"Nothing to push"</span>
 
 terraform init
 terraform apply
@@ -1009,7 +1038,7 @@ jx secret edit <span class="nt">-f</span> sonar
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Cluster name.</td>
+<td>Cluster name to be created.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
@@ -1733,18 +1762,7 @@ gcloud container clusters get-credentials <span class="s2">"</span><span class="
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">jx nx jx</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_jx"><a class="anchor" href="#_jx"></a>JX</h3>
-<div class="sect3">
-<h4 id="_credential-storage-git"><a class="anchor" href="#_credential-storage-git"></a>Credential Storage - Git</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">~/git/credentials</code></pre>
-</div>
+<pre class="rouge highlight"><code data-lang="shell">jx ns jx</code></pre>
 </div>
 </div>
 </div>
@@ -1849,7 +1867,7 @@ Current properties are applicable for projects generated by SDLC quickstart.
 <div id="footer">
 <div id="footer-text">
 Version 0.1.0<br>
-Last updated 2020-12-28 15:07:10 +0200
+Last updated 2021-04-27 18:05:12 +0300
 </div>
 </div>
 </body>
