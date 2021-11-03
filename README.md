@@ -1,2 +1,2 @@
 # SDLC from VITech team
-DOCS: https://vitech-team.github.io/SDLC/
+DOCS: https://vitech-team-sdlc.github.io/SDLC/
